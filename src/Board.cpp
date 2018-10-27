@@ -110,6 +110,16 @@ int Board::put (int pos, string color)
   return put (pos, color_id);
 }
 
+int Board::isFull ()
+{
+  for (int i=0; i < BOARD_SIZE; i++)
+    {
+      if (board[i] == EMPTY)
+        return 0;
+    }
+  return 1;
+}
+
 void Board::checkFinishedOrNot ()
 {
   int i, j, sum;
@@ -127,4 +137,6 @@ void Board::checkFinishedOrNot ()
           break;
         }
     }
+  if (isFull ())
+    finishedFlag = 1;
 }

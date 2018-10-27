@@ -53,6 +53,7 @@ private:
   int isEmpty (int pos);
   int isCycle (int pos);
   int isCross (int pos);
+  int isFull();
 };
 
 #endif /* BOARD_HPP */
