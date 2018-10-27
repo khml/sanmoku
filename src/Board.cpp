@@ -47,29 +47,29 @@ void Board::printBoard ()
   std::cerr << std::endl;
 }
 
-int Board::isAny (int pos, int id)
+int Board::isAny (const int pos, const int id)
 {
   if (board[pos] == id)
     return 1;
   return 0;
 }
 
-int Board::isEmpty (int pos)
+int Board::isEmpty (const int pos)
 {
   return isAny (pos, EMPTY);
 }
 
-int Board::isCross (int pos)
+int Board::isCross (const int pos)
 {
   return isAny (pos, CROSS);
 }
 
-int Board::isCycle (int pos)
+int Board::isCycle (const int pos)
 {
   return isAny (pos, CYCLE);
 }
 
-int Board::isLegal (int pos)
+int Board::isLegal (const int pos)
 {
   if (isEmpty (pos))
     return 1;
@@ -81,7 +81,7 @@ int Board::isFinished ()
   return finishedFlag;
 }
 
-int Board::put (int pos, int color)
+int Board::put (const int pos, const int color)
 {
   if (finishedFlag)
     return 0;
@@ -94,7 +94,7 @@ int Board::put (int pos, int color)
   return 1;
 }
 
-int Board::put (int pos, string color)
+int Board::put (const int pos, const string color)
 {
   int color_id;
   if (color == CYCLE_SIGN)

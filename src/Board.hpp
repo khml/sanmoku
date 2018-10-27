@@ -29,9 +29,9 @@ public:
   Board ();
   Board (const Board& orig);
   virtual ~Board ();
-  int put (int pos, int color);
-  int put (int pos, string color);
-  int isLegal (int pos);
+  int put (const int pos, const int color);
+  int put (const int pos, const string color);
+  int isLegal (const int pos);
   int isFinished ();
   void printBoard ();
   int result = NONE_RESULT;
@@ -55,10 +55,10 @@ private:
   };
   int finishedFlag = 0;
   void checkFinishedOrNot();
-  int isAny (int pos, int id);
-  int isEmpty (int pos);
-  int isCycle (int pos);
-  int isCross (int pos);
+  int isAny (const int pos, const int id);
+  int isEmpty (const int pos);
+  int isCycle (const int pos);
+  int isCross (const int pos);
   int isFull();
 };
 
