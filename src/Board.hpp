@@ -16,6 +16,11 @@
 #define CHECK_ID_ARRAY_SIZE 8
 #define CHECK_ID_ARRAY_SIDE_SIZE 3
 
+#define NONE_RESULT 0
+#define DRAW 1
+#define CYCLE_WIN 2
+#define CROSS_WIN 3
+
 using std::string;
 
 class Board
@@ -29,6 +34,7 @@ public:
   int isLegal (int pos);
   int isFinished ();
   void printBoard ();
+  int result = NONE_RESULT;
 private:
   int board[BOARD_SIZE] ={
     EMPTY, EMPTY, EMPTY,

@@ -22,6 +22,18 @@ using std::string;
  * 
  */
 
+void checkResult(Board& board)
+{
+  string result;
+  if (board.result == DRAW)
+    result = "Draw";
+  else
+    {
+      result = board.result == CYCLE_WIN? CYCLE_SYMBOL : CROSS_SYMBOL;
+    }
+  cerr << "game finished! result : " << result << endl;
+}
+
 void playMode ()
 {
   Board board;
@@ -47,7 +59,7 @@ void playMode ()
 
       if (board.isFinished ())
         {
-          cerr << "game finished" << endl;
+          checkResult (board);
           break;
         }
     }
@@ -63,7 +75,10 @@ void selfMode ()
       player.play (board);
       board.printBoard ();
       if (board.isFinished ())
-        break;
+        {
+          checkResult (board);
+          break;
+        }
     }
 }
 

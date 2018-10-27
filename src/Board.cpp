@@ -134,9 +134,13 @@ void Board::checkFinishedOrNot ()
       if ((sum == CYCLE_SUM) || (sum == CROSS_SUM))
         {
           finishedFlag = 1;
+          result = sum == CYCLE_SUM? CYCLE_WIN : CROSS_WIN;
           break;
         }
     }
   if (isFull ())
-    finishedFlag = 1;
+    {
+      result = DRAW;
+      finishedFlag = 1;
+    }
 }
