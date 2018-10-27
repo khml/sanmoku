@@ -70,7 +70,7 @@ void selfMode ()
 int main (int argc, char** argv)
 {
   string cmd;
-  cerr << "choice mode = ";
+  cerr << "choice mode (self or play) = ";
   cin >> cmd;
   if (cmd == "play")
     playMode ();
