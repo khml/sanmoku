@@ -17,9 +17,9 @@
 #define CHECK_ID_ARRAY_SIDE_SIZE 3
 
 #define NONE_RESULT 0
-#define DRAW 1
-#define CYCLE_WIN 2
-#define CROSS_WIN 3
+#define DRAW 0
+#define CYCLE_WIN CYCLE
+#define CROSS_WIN CROSS
 
 using std::string;
 
