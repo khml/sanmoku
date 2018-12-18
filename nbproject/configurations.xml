@@ -5,8 +5,12 @@
       <logicalFolder name="src" displayName="src" projectFiles="true">
         <itemPath>src/Board.cpp</itemPath>
         <itemPath>src/Board.hpp</itemPath>
+        <itemPath>src/History.cpp</itemPath>
+        <itemPath>src/History.hpp</itemPath>
         <itemPath>src/Player.cpp</itemPath>
         <itemPath>src/Player.hpp</itemPath>
+        <itemPath>src/Position.cpp</itemPath>
+        <itemPath>src/Position.hpp</itemPath>
         <itemPath>src/main.cpp</itemPath>
       </logicalFolder>
     </logicalFolder>
@@ -46,9 +50,17 @@
       </item>
       <item path="src/Board.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="src/History.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/History.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="src/Player.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/Player.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/Position.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/Position.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/main.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -78,9 +90,17 @@
       </item>
       <item path="src/Board.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="src/History.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/History.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="src/Player.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/Player.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/Position.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/Position.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/main.cpp" ex="false" tool="1" flavor2="0">
       </item>

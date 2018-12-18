@@ -9,6 +9,8 @@
 
 #include <string>
 
+#include "History.hpp"
+
 #define BOARD_SIZE 9
 #define EMPTY 0
 #define CYCLE -1
@@ -35,6 +37,7 @@ public:
   int isFinished ();
   void printBoard ();
   int result = NONE_RESULT;
+  History history;
 private:
   int board[BOARD_SIZE] ={
     EMPTY, EMPTY, EMPTY,

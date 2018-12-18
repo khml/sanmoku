@@ -90,6 +90,7 @@ int Board::put (const int pos, const int color)
     return 0;
 
   board[pos] = color;
+  history.put (color, pos);
   checkFinishedOrNot ();
   return 1;
 }
