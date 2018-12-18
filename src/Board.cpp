@@ -47,6 +47,16 @@ void Board::printBoard ()
   std::cerr << std::endl;
 }
 
+string Board::asString ()
+{
+  string stringBoard = std::to_string (board[0]);
+  for (int i = 1; i < BOARD_SIZE; i++)
+    {
+      stringBoard += "," + std::to_string (board[i]);
+    }
+  return stringBoard;
+}
+
 int Board::isAny (const int pos, const int id)
 {
   if (board[pos] == id)
@@ -113,7 +123,7 @@ int Board::put (const int pos, const string color)
 
 int Board::isFull ()
 {
-  for (int i=0; i < BOARD_SIZE; i++)
+  for (int i = 0; i < BOARD_SIZE; i++)
     {
       if (board[i] == EMPTY)
         return 0;
@@ -135,7 +145,7 @@ void Board::checkFinishedOrNot ()
       if ((sum == CYCLE_SUM) || (sum == CROSS_SUM))
         {
           finishedFlag = 1;
-          result = sum == CYCLE_SUM? CYCLE_WIN : CROSS_WIN;
+          result = sum == CYCLE_SUM ? CYCLE_WIN : CROSS_WIN;
           break;
         }
     }

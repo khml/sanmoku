@@ -10,7 +10,7 @@ Position::Position () { }
 
 Position::Position (int color, int pos) : colorValue(color), positionValue(pos) {}
 
-Position::Position (const Position& orig) { }
+Position::Position (const Position& orig) : colorValue(orig.colorValue), positionValue(orig.positionValue) { }
 
 Position::~Position () { }
 

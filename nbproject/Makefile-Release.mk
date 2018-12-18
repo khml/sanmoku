@@ -36,6 +36,7 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 # Object Files
 OBJECTFILES= \
 	${OBJECTDIR}/src/Board.o \
+	${OBJECTDIR}/src/DataSaver.o \
 	${OBJECTDIR}/src/History.o \
 	${OBJECTDIR}/src/Player.o \
 	${OBJECTDIR}/src/Position.o \
@@ -70,6 +71,11 @@ ${OBJECTDIR}/src/Board.o: src/Board.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -std=c++14 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Board.o src/Board.cpp
+
+${OBJECTDIR}/src/DataSaver.o: src/DataSaver.cpp
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -std=c++14 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/DataSaver.o src/DataSaver.cpp
 
 ${OBJECTDIR}/src/History.o: src/History.cpp
 	${MKDIR} -p ${OBJECTDIR}/src

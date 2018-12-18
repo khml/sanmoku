@@ -5,6 +5,8 @@
       <logicalFolder name="src" displayName="src" projectFiles="true">
         <itemPath>src/Board.cpp</itemPath>
         <itemPath>src/Board.hpp</itemPath>
+        <itemPath>src/DataSaver.cpp</itemPath>
+        <itemPath>src/DataSaver.hpp</itemPath>
         <itemPath>src/History.cpp</itemPath>
         <itemPath>src/History.hpp</itemPath>
         <itemPath>src/Player.cpp</itemPath>
@@ -50,6 +52,10 @@
       </item>
       <item path="src/Board.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="src/DataSaver.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/DataSaver.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="src/History.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/History.hpp" ex="false" tool="3" flavor2="0">
@@ -89,6 +95,10 @@
       <item path="src/Board.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/Board.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/DataSaver.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/DataSaver.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/History.cpp" ex="false" tool="1" flavor2="0">
       </item>

@@ -9,6 +9,7 @@
 #include <string>
 #include "Board.hpp"
 #include "Player.hpp"
+#include "DataSaver.hpp"
 
 using std::cerr;
 using std::cin;
@@ -80,6 +81,8 @@ void selfMode ()
           break;
         }
     }
+  DataSaver dataSaver;
+  dataSaver.save(board.history, board.result);
 }
 
 int main (int argc, char** argv)

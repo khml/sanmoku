@@ -36,6 +36,7 @@ public:
   int isLegal (const int pos);
   int isFinished ();
   void printBoard ();
+  string asString();
   int result = NONE_RESULT;
   History history;
 private:

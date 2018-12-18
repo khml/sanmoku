@@ -8,7 +8,13 @@
 
 History::History () { }
 
-History::History (const History& orig) { }
+History::History (const History& orig) : hisotorySize(orig.hisotorySize)
+{
+  for (int i=0; i<hisotorySize; i++)
+    {
+      hisotoryArray[i] = orig.fetchPos (i);
+    }
+}
 
 History::~History () { }
 
@@ -28,7 +34,7 @@ int History::size () const
   return hisotorySize;
 }
 
-Position History::fetchPos (int index)
+Position History::fetchPos (int index) const
 {
   return hisotoryArray[index];
 }

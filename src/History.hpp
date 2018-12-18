@@ -20,7 +20,7 @@ public:
   void put (const Position pos);
   void put (const int color, const int pos);
   int size () const;
-  Position fetchPos(int index);
+  Position fetchPos(int index) const;
 private:
   int hisotorySize = 0;
   Position hisotoryArray[HISTORY_SIZE];
