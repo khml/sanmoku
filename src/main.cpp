@@ -23,14 +23,14 @@ using std::string;
  * 
  */
 
-void checkResult(Board& board)
+void checkResult (Board& board)
 {
   string result;
   if (board.result == DRAW)
     result = "Draw";
   else
     {
-      result = board.result == CYCLE_WIN? CYCLE_SYMBOL : CROSS_SYMBOL;
+      result = board.result == CYCLE_WIN ? CYCLE_SYMBOL : CROSS_SYMBOL;
     }
   cerr << "game finished! result : " << result << endl;
 }
@@ -82,20 +82,39 @@ void selfMode ()
         }
     }
   DataSaver dataSaver;
-  dataSaver.save(board.history, board.result);
+  dataSaver.save (board.history, board.result);
+}
+
+void selectMode (string mode)
+{
+  if (mode == "play")
+    playMode ();
+  else if (mode == "self")
+    selfMode ();
+  else
+    cerr << "no exist such a mode : " << mode;
+
 }
 
 int main (int argc, char** argv)
 {
-  string cmd;
-  cerr << "choice mode (self or play) = ";
-  cin >> cmd;
-  if (cmd == "play")
-    playMode ();
-  else if (cmd == "self")
-    selfMode ();
-  else
-    cerr << "no exist such a mode : " << cmd;
+  string mode;
+  if (argc > 2)
+    {
+      cerr << "too many args" << endl;
+      exit (0);
+    }
+
+  if (argc == 2)
+    mode = argv[1];
+
+  if (argc == 1)
+    {
+      cerr << "choice mode (self or play) = ";
+      cin >> mode;
+    }
+  
+  selectMode (mode);
 
   return 0;
 }
