@@ -97,6 +97,14 @@ class DataStack:
         self.__boards = []
         self.__policies = []
 
+    @property
+    def boards(self):
+        return self.__boards
+
+    @property
+    def policies(self):
+        return self.__policies
+
     def push(self, one_line_data, check_none=True):
         """
         :param one_line_data: DataReader
@@ -109,14 +117,23 @@ class DataStack:
         self.__boards.append(one_line_data.board)
         self.__policies.append(one_line_data.policy)
 
+    def __wrap_with_ndarray(self):
+        self.__boards = np.array(self.__boards)
+        self.__policies = np.array(self.__policies)
+
+    def __unwrap_with_list(self):
+        self.__boards = list(self.__boards)
+        self.__policies = list(self.__policies)
+
     def save_as_pkl(self, save_name):
         """
         :param save_name: str
         :return:
         """
-        dataset = (self.__boards, self.__policies)
+        self.__wrap_with_ndarray()
         with open(save_name, 'wb') as f:
-            pickle.dump(dataset, f)
+            pickle.dump(self, f)
+        self.__unwrap_with_list()
 
 
 class DatasetMaker:
@@ -131,9 +148,8 @@ class DatasetMaker:
         with open(filename, 'r') as f:
             self.__data = f.readlines()
 
-    def make_dataset(self, save_name, data_reader=OneLineData):
+    def make_dataset(self, data_reader=OneLineData):
         """
-        :param save_name: str
         :param data_reader: DataUtil.Data
         :return:
         """
@@ -145,15 +161,17 @@ class DatasetMaker:
         for line in tqdm(self.__data):
             line_data = data_reader(line)
             data_stack.push(line_data)
-
-        data_stack.save_as_pkl(save_name)
+        return data_stack
 
 
 def main():
     filename = 'result.txt'
+    save_name = 'data.pkl'
+
     dataset_maker = DatasetMaker()
     dataset_maker.load_data_from_file(filename)
-    dataset_maker.make_dataset(save_name='data.pkl')
+    data = dataset_maker.make_dataset()
+    data.save_as_pkl(save_name=save_name)
 
 
 if __name__ == '__main__':
