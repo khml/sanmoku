@@ -104,11 +104,16 @@ class Trainer:
                 loss_summary += loss.item()
         return loss_summary / self._valid_data_size
 
+    def save_model_as_torch_script(self, save_name):
+        example_data, _ = next(iter(self._train_dataloader))
+        traced_script_module = torch.jit.trace(self.model, example_data)
+        traced_script_module.save(save_name)
+
 
 def main():
     filename = 'data.pkl'
-    model_save_name = 'model.pt'
-    Epoch = 5
+    save_name = 'model.pt'
+    Epoch = 1
 
     model = Model(9, 9, 9)
     trainer = Trainer(filename, model)
@@ -121,7 +126,8 @@ def main():
         valid_loss = trainer.valid()
         print("valid loss = {}".format(valid_loss))
 
-    torch.save(trainer.model, model_save_name)
+    print("save Model")
+    trainer.save_model_as_torch_script(save_name)
 
 
 if __name__ == '__main__':
