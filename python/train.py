@@ -7,6 +7,7 @@ import torch
 import torchvision
 
 from MakeDataset import DataStack
+from Model import Model
 
 
 class DatafileLoader:
@@ -42,18 +43,6 @@ class DatafileLoader:
         train_loader = self.__make_data_loader(train[0], train[1], batch_size, shuffle=True)
         valid_loader = self.__make_data_loader(valid[0], valid[1], batch_size, shuffle=False)
         return train_loader, valid_loader
-
-
-class Model(torch.nn.Module):
-    def __init__(self, in_size, mid_size, out_size):
-        super(Model, self).__init__()
-        self.fc1 = torch.nn.Linear(in_size, mid_size)
-        self.fc2 = torch.nn.Linear(mid_size, out_size)
-
-    def forward(self, x):
-        x = torch.nn.functional.relu(self.fc1(x))
-        x = self.fc2(x)
-        return x
 
 
 class Trainer:
