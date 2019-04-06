@@ -39,13 +39,14 @@ public:
   string asString();
   int result = NONE_RESULT;
   History history;
+  int* asList() { return board;};
 private:
   int board[BOARD_SIZE] ={
     EMPTY, EMPTY, EMPTY,
     EMPTY, EMPTY, EMPTY,
     EMPTY, EMPTY, EMPTY
   };
-  
+
   /*
    * 0 1 2
    * 3 4 5
