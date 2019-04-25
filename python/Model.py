@@ -1,5 +1,6 @@
 # -*- coding:utf-8 -*-
 
+import numpy as np
 import torch
 
 
@@ -13,3 +14,14 @@ class Model(torch.nn.Module):
         x = torch.nn.functional.relu(self.fc1(x))
         x = self.fc2(x)
         return x
+
+    def save(self, path: str):
+        torch.save(self.state_dict(), path)
+
+    def load(self, path):
+        self.load_state_dict(torch.load(path))
+
+    def infer(self, data: np.array) -> np.array:
+        with torch.no_grad():
+            data = torch.Tensor(data)
+            return self(data).numpy()
