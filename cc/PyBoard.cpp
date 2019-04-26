@@ -40,7 +40,12 @@ public:
             *pyArray.mutable_data(i) = array[i];
         }
         return pyArray;
-    }
+    };
+
+    int result()
+    {
+        return board.result;
+    };
 
 private:
     Board board;
@@ -54,5 +59,6 @@ PYBIND11_MODULE(ccsanmoku, m)
         .def("put", &PyBoard::put, "put(const int pos, const bool isCross)")
         .def("asList", &PyBoard::asList)
         .def("isLegal", &PyBoard::isLegal, "isLegal(const int pos)")
-        .def("isFinished", &PyBoard::isFinished);
+        .def("isFinished", &PyBoard::isFinished)
+        .def("result", &PyBoard::result);
 }
