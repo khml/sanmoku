@@ -26,3 +26,11 @@ $ cmake cmake -DPYBIND11_PYTHON_VERSION=3.6 ..
 $ make
 ```
 
+### install
+```
+# copy so file to currentDir, XY is PythonX.Y
+# cp build/ccsanmoku.cpython-XYm-darwin.so .
+# e.g. if you use 3.6
+cp build/ccsanmoku.cpython-36m-darwin.so .
+$ python setup.py install
+```
