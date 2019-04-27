@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 
 import sys
-from setuptools import setup
+from distutils.core import setup
 
 python_version = sys.version[:3].replace(".", "")
 
