@@ -10,12 +10,12 @@ from Loggers import get_io_stream_logger, Logger
 def play_one_game(board: Board, model: Model, logger: Logger):
     color = CROSS
     while True:
-        policy = model.infer(board.data(color == CROSS))
+        policy = model.infer(board.data(color))
         pos = choice_move(policy, board, random=5)
         if pos is False:
             logger.info("*** Move Choice Error ***")
             exit()
-        board.put(pos, color == CROSS)
+        board.put(pos, color)
 
         logger.debug("\n" + str(board.as_list.reshape(3, 3)))
 

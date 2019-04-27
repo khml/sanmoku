@@ -21,8 +21,8 @@ class Board:
     def __init__(self):
         self._board = cc.Board()
 
-    def put(self, pos: int, is_cross: bool):
-        self._board.put(pos, is_cross)
+    def put(self, pos: int, color: int):
+        self._board.put(pos, color == CROSS)
 
     @property
     def as_list(self) -> np.array:
@@ -39,10 +39,10 @@ class Board:
     def result(self) -> int:
         return self._board.result()
 
-    def data(self, is_cross: bool):
-        color = np.zeros
-        if is_cross:
-            color = np.ones
+    def data(self, color: int):
+        color_array = np.zeros
+        if color == CROSS:
+            color_array = np.ones
 
-        one_hot_data = [color(BOARD_SIZE), (self.as_list == CROSS) * 1, (self.as_list == CYCLE) * 1]
+        one_hot_data = [color_array(BOARD_SIZE), (self.as_list == CROSS) * 1, (self.as_list == CYCLE) * 1]
         return np.concatenate(one_hot_data)
