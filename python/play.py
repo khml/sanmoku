@@ -2,9 +2,8 @@
 
 import os
 
-import numpy as np
-
 from Board import Board, CROSS, CYCLE, turn_color
+from Move import choice_move
 from Model import Model
 
 
@@ -22,10 +21,11 @@ def main():
     color = CROSS
     while True:
         policy = model.infer(board.data(color == CROSS))
-        for pos in np.argsort(policy):
-            if board.is_legal(pos):
-                board.put(pos, color == CROSS)
-                break
+        pos = choice_move(policy, board, random=5)
+        if pos is False:
+            print("*** Move Choice Error ***")
+            exit()
+        board.put(pos, color == CROSS)
 
         print(board.as_list.reshape(3, 3))
         print()
