@@ -3,8 +3,7 @@
 import os
 
 from Board import Board, CROSS, CYCLE, turn_color
-from Move import choice_move
-from Model import Model
+from Model import Model, choice_move
 from Loggers import get_io_stream_logger, Logger
 
 
