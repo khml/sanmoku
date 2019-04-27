@@ -3,6 +3,7 @@
 import numpy as np
 
 import ccsanmoku as cc
+from MoveHistory import MoveHistory
 
 CROSS = 1
 CYCLE = -1
@@ -20,9 +21,16 @@ def turn_color(color: int):
 class Board:
     def __init__(self):
         self._board = cc.Board()
+        self._moves = MoveHistory()
+
+    @property
+    def moves(self):
+        return self._moves
 
     def put(self, pos: int, color: int):
+        data = self.data(color)
         self._board.put(pos, color == CROSS)
+        self._moves.add(color, pos, data)
 
     @property
     def as_list(self) -> np.array:
