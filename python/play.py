@@ -5,21 +5,10 @@ import os
 from Board import Board, CROSS, CYCLE, turn_color
 from Move import choice_move
 from Model import Model
-from Loggers import get_io_stream_logger
+from Loggers import get_io_stream_logger, Logger
 
 
-def main():
-    model = Model(27, 18, 9)
-    board = Board()
-    logger = get_io_stream_logger(__name__)
-
-    model_path = "model.pt"
-    if not os.path.exists(model_path):
-        model.save(model_path)
-    else:
-        model.load(model_path)
-
-    logger.info("start")
+def play_one_game(board: Board, model: Model, logger: Logger):
     color = CROSS
     while True:
         policy = model.infer(board.data(color == CROSS))
@@ -35,6 +24,21 @@ def main():
             break
 
         color = turn_color(color)
+
+
+def main():
+    model = Model(27, 18, 9)
+    board = Board()
+    logger = get_io_stream_logger(__name__)
+
+    model_path = "model.pt"
+    if not os.path.exists(model_path):
+        model.save(model_path)
+    else:
+        model.load(model_path)
+
+    logger.info("start")
+    play_one_game(board, model, logger)
     logger.info("finish")
 
     if board.result == CROSS:
