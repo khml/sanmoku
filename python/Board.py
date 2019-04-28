@@ -9,6 +9,12 @@ CROSS = 1
 CYCLE = -1
 DRAW = 0
 
+EMPTY_SIGN = '.'
+CROSS_SIGN = 'X'
+CYCLE_SIGN = 'O'
+
+BOARD_FORMAT = "{} | {} | {} \n{} | {} | {} \n{} | {} | {}"
+
 BOARD_SIZE = 9
 
 
@@ -54,3 +60,14 @@ class Board:
 
         one_hot_data = [color_array(BOARD_SIZE), (self.as_list == CROSS) * 1, (self.as_list == CYCLE) * 1]
         return np.concatenate(one_hot_data)
+
+    def string_board(self):
+        board = []
+        for color in self.as_list:
+            if color == CROSS:
+                board.append(CROSS_SIGN)
+            elif color == CYCLE:
+                board.append(CYCLE_SIGN)
+            else:
+                board.append(EMPTY_SIGN)
+        return BOARD_FORMAT.format(*board)

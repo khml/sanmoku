@@ -17,7 +17,7 @@ def play_one_game(board: Board, model: Model, logger: Logger):
             exit()
         board.put(pos, color)
 
-        logger.debug("\n" + str(board.as_list.reshape(3, 3)))
+        logger.debug("\n" + board.string_board())
 
         if board.is_finished:
             break
