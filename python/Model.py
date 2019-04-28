@@ -31,7 +31,7 @@ class Model(torch.nn.Module):
 
 def choice_move(policy: np.ndarray, board: Board, random: int = 0):
     p = policy.copy()
-    p += p.max() - p.min()
+    p -= p.min()
     p /= sum(p)
 
     for _ in range(random):
