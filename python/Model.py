@@ -47,3 +47,42 @@ def choice_move(policy: np.ndarray, board: Board, random: int = 0):
             return pos
 
     return False
+
+
+class Trainer:
+    def __init__(self, model: Model, device='cpu'):
+        self._device = torch.device(device)
+
+        self._model = model
+        self._criterion = torch.nn.CrossEntropyLoss()
+        self._optimizer = torch.optim.SGD(self.model.parameters(), lr=1e-3, momentum=0.9)
+
+    @property
+    def model(self):
+        return self._model
+
+    @staticmethod
+    def _to_tensor(data, pos):
+        data = torch.Tensor(data)
+        pos = torch.LongTensor(pos)
+        return [data, pos]
+
+    def train_from_board(self, board: Board):
+        self.model.train()
+        history = board.moves.data[board.result]
+        data = []
+        pos = []
+        for move in history:
+            data.append(move.data)
+            pos.append(move.pos)
+        data = np.array(data)
+        pos = np.array(pos)
+        data, pos = self._to_tensor(data, pos)
+
+        self._optimizer.zero_grad()
+        logit = self.model(data)
+        predict = torch.nn.functional.softmax(logit, dim=1)
+        loss = self._criterion(predict, pos)
+        loss.backward()
+        self._optimizer.step()
+        return loss

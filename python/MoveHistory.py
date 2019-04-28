@@ -4,8 +4,19 @@ import numpy as np
 
 import Board
 
-POS = 'pos'
-DATA = 'data'
+
+class Move:
+    def __init__(self, pos: int, data: np.ndarray):
+        self._pos = pos
+        self._data = data
+
+    @property
+    def pos(self):
+        return self._pos
+
+    @property
+    def data(self):
+        return self._data
 
 
 class MoveHistory:
@@ -15,8 +26,8 @@ class MoveHistory:
             Board.CYCLE: []
         }
 
-    def add(self, color: int, pos: int, board_data: np.array):
-        self._data_dict[color].append({POS: pos, DATA: board_data})
+    def add(self, color: int, pos: int, board_data: np.ndarray):
+        self._data_dict[color].append(Move(pos, board_data))
 
     @property
     def data(self):

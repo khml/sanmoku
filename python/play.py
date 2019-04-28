@@ -2,8 +2,8 @@
 
 import os
 
-from Board import Board, CROSS, CYCLE, turn_color
-from Model import Model, choice_move
+from Board import Board, CROSS, CYCLE, DRAW, turn_color
+from Model import Model, choice_move, Trainer
 from Loggers import get_io_stream_logger, Logger
 
 
@@ -24,10 +24,18 @@ def play_one_game(board: Board, model: Model, logger: Logger):
 
         color = turn_color(color)
 
+    if board.result == CROSS:
+        result = "X Win"
+    elif board.result == CYCLE:
+        result = "O win"
+    else:
+        result = "DRAW"
+    logger.info("result is {}".format(result))
+
 
 def main():
     model = Model(27, 18, 9)
-    board = Board()
+    trainer = Trainer(model)
     logger = get_io_stream_logger(__name__)
 
     model_path = "model.pt"
@@ -36,17 +44,17 @@ def main():
     else:
         model.load(model_path)
 
-    logger.info("start")
-    play_one_game(board, model, logger)
-    logger.info("finish")
+    for _ in range(10000):
+        logger.info("start")
+        board = Board()
+        play_one_game(board, model, logger)
+        logger.info("finish")
 
-    if board.result == CROSS:
-        result = "X Win"
-    elif board.result == CYCLE:
-        result = "O win"
-    else:
-        result = "DRAW"
-    logger.info("result is {}".format(result))
+        if not board.result == DRAW:
+            logger.info("start train")
+            loss = trainer.train_from_board(board)
+            logger.info("loss = {}".format(loss))
+            model.save(model_path)
 
 
 if __name__ == '__main__':
