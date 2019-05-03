@@ -21,7 +21,7 @@ $ cd build
 # if you use Python Version X.Y, 
 # use flag -DPYBIND11_PYTHON_VERSION=X.Y
 # e.g. if you use 3.6
-$ cmake cmake -DPYBIND11_PYTHON_VERSION=3.6 ..
+$ cmake -DPYBIND11_PYTHON_VERSION=3.6 ..
 
 $ make
 ```
