@@ -1,2 +1,5 @@
 /build/
 /dist/
+/.idea
+/.dep.inc
+/cmake-build-debug
