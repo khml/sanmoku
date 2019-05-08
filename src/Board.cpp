@@ -12,6 +12,8 @@
 #define CROSS_SIGN "x"
 #define EMPTY_SIGN "."
 
+using std::vector;
+
 namespace sanmoku
 {
     Board::Board () { }
@@ -126,5 +128,13 @@ namespace sanmoku
             result = Empty;
             finishedFlag = true;
         }
+    }
+
+    vector<float> Board::getBoard()
+    {
+        auto vec = vector<float>();
+        for (auto val : board)
+            vec.push_back((float) val);
+        return vec;
     }
 }

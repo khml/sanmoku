@@ -8,6 +8,7 @@
 #define BOARD_HPP
 
 #include <string>
+#include <vector>
 
 #define BOARD_SIZE 9
 #define CHECK_ID_ARRAY_SIZE 8
@@ -42,6 +43,7 @@ namespace sanmoku
         bool isFinished ();
         void printBoard ();
         Color result = Empty;
+        std::vector<float> getBoard ();
     private:
         Color board[BOARD_SIZE] ={
                 Empty, Empty, Empty,

@@ -9,6 +9,7 @@
 
 #include <random>
 #include "Board.hpp"
+#include "Model.hpp"
 
 namespace sanmoku
 {
@@ -20,10 +21,11 @@ namespace sanmoku
         virtual ~Player ();
         Color toPlayColor = Cross;
         bool play (Board& board);
+        Move genMove(Board& board);
     private:
         std::random_device rand;
         Move getRandomPos ();
-
+        Net model;
     };
 }
 

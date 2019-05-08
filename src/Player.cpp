@@ -4,9 +4,7 @@
  * and open the template in the editor.
  */
 
-#include <random>
 #include "Player.hpp"
-#include "Board.hpp"
 
 namespace sanmoku
 {
@@ -21,6 +19,15 @@ namespace sanmoku
         return {toPlayColor, (int) rand () % BOARD_SIZE};
     }
 
+    Move Player::genMove(sanmoku::Board &board)
+    {
+        auto policy = model.infer(board.getBoard());
+        std::discrete_distribution<std::size_t> dist(policy.begin(), policy.end());
+        std::mt19937 engine(rand());
+        std::size_t pos = dist(engine);
+        return {toPlayColor, (int) pos};
+    }
+
     bool Player::play (Board& board)
     {
         if (board.isFinished ())
@@ -28,7 +35,7 @@ namespace sanmoku
 
         while (true)
         {
-            Move move = getRandomPos ();
+            Move move = genMove (board);
             if (board.isLegal (move))
             {
                 board.put (move);
