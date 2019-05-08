@@ -9,12 +9,14 @@
 #include <string>
 #include "Board.hpp"
 #include "Player.hpp"
-#include "DataSaver.hpp"
 
 using std::cerr;
 using std::cin;
 using std::endl;
 using std::string;
+
+using sanmoku::Board;
+using sanmoku::Player;
 
 #define CYCLE_SYMBOL "o"
 #define CROSS_SYMBOL "x"
@@ -81,8 +83,6 @@ void selfMode ()
           break;
         }
     }
-  DataSaver dataSaver;
-  dataSaver.save (board.history, board.result);
 }
 
 void selectMode (string mode)
@@ -113,7 +113,7 @@ int main (int argc, char** argv)
       cerr << "choice mode (self or play) = ";
       cin >> mode;
     }
-  
+
   selectMode (mode);
 
   return 0;

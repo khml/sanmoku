@@ -14,144 +14,146 @@
 #define CROSS_SIGN "x"
 #define EMPTY_SIGN "."
 
-Board::Board () { }
-
-Board::Board (const Board& orig) { }
-
-Board::~Board () { }
-
-void Board::printBoard ()
+namespace sanmoku
 {
-  int id;
-  std::string sign;
+    Board::Board () { }
 
-  for (int pos = 0; pos < BOARD_SIZE; pos++)
+    Board::Board (const Board& orig) { }
+
+    Board::~Board () { }
+
+    void Board::printBoard ()
     {
-      id = board[pos];
-      if (id == EMPTY)
-        sign = EMPTY_SIGN;
-      else if (id == CYCLE)
-        sign = CYCLE_SIGN;
-      else if (id == CROSS)
-        sign = CROSS_SIGN;
-      else
-        {
-          std::cerr << "id error" << std::endl;
-          break;
-        }
-      std::cerr << sign << ", ";
+        int id;
+        std::string sign;
 
-      if ((pos + 1) % 3 == 0)
+        for (int pos = 0; pos < BOARD_SIZE; pos++)
+        {
+            id = board[pos];
+            if (id == EMPTY)
+                sign = EMPTY_SIGN;
+            else if (id == CYCLE)
+                sign = CYCLE_SIGN;
+            else if (id == CROSS)
+                sign = CROSS_SIGN;
+            else
+            {
+                std::cerr << "id error" << std::endl;
+                break;
+            }
+            std::cerr << sign << ", ";
+
+            if ((pos + 1) % 3 == 0)
+                std::cerr << std::endl;
+        }
         std::cerr << std::endl;
     }
-  std::cerr << std::endl;
-}
 
-string Board::asString ()
-{
-  string stringBoard = std::to_string (board[0]);
-  for (int i = 1; i < BOARD_SIZE; i++)
+    string Board::asString ()
     {
-      stringBoard += "," + std::to_string (board[i]);
-    }
-  return stringBoard;
-}
-
-int Board::isAny (const int pos, const int id)
-{
-  if (board[pos] == id)
-    return 1;
-  return 0;
-}
-
-int Board::isEmpty (const int pos)
-{
-  return isAny (pos, EMPTY);
-}
-
-int Board::isCross (const int pos)
-{
-  return isAny (pos, CROSS);
-}
-
-int Board::isCycle (const int pos)
-{
-  return isAny (pos, CYCLE);
-}
-
-int Board::isLegal (const int pos)
-{
-  if (isEmpty (pos))
-    return 1;
-  return 0;
-}
-
-int Board::isFinished ()
-{
-  return finishedFlag;
-}
-
-int Board::put (const int pos, const int color)
-{
-  if (finishedFlag)
-    return 0;
-
-  if (!isLegal (pos))
-    return 0;
-
-  board[pos] = color;
-  history.put (color, pos);
-  checkFinishedOrNot ();
-  return 1;
-}
-
-int Board::put (const int pos, const string color)
-{
-  int color_id;
-  if (color == CYCLE_SIGN)
-    color_id = CYCLE;
-  else if (color == CROSS_SIGN)
-    color_id = CROSS;
-  else
-    {
-      std::cerr << "no exist such a color : " << color << std::endl;
-      return 0;
+        string stringBoard = std::to_string (board[0]);
+        for (int i = 1; i < BOARD_SIZE; i++)
+        {
+            stringBoard += "," + std::to_string (board[i]);
+        }
+        return stringBoard;
     }
 
-  return put (pos, color_id);
-}
-
-int Board::isFull ()
-{
-  for (int i = 0; i < BOARD_SIZE; i++)
+    int Board::isAny (const int pos, const int id)
     {
-      if (board[i] == EMPTY)
+        if (board[pos] == id)
+            return 1;
         return 0;
     }
-  return 1;
-}
 
-void Board::checkFinishedOrNot ()
-{
-  int i, j, sum;
-  for (i = 0; i < CHECK_ID_ARRAY_SIZE; i++)
+    int Board::isEmpty (const int pos)
     {
-      sum = 0;
-      for (j = 0; j < CHECK_ID_ARRAY_SIDE_SIZE; j++)
-        {
-          sum += board[checkIdArray[i][j]];
-        }
-      //std::cerr << i << ": " << sum << std::endl;
-      if ((sum == CYCLE_SUM) || (sum == CROSS_SUM))
-        {
-          finishedFlag = 1;
-          result = sum == CYCLE_SUM ? CYCLE_WIN : CROSS_WIN;
-          break;
-        }
+        return isAny (pos, EMPTY);
     }
-  if (isFull ())
+
+    int Board::isCross (const int pos)
     {
-      result = DRAW;
-      finishedFlag = 1;
+        return isAny (pos, CROSS);
+    }
+
+    int Board::isCycle (const int pos)
+    {
+        return isAny (pos, CYCLE);
+    }
+
+    int Board::isLegal (const int pos)
+    {
+        if (isEmpty (pos))
+            return 1;
+        return 0;
+    }
+
+    int Board::isFinished ()
+    {
+        return finishedFlag;
+    }
+
+    int Board::put (const int pos, const int color)
+    {
+        if (finishedFlag)
+            return 0;
+
+        if (!isLegal (pos))
+            return 0;
+
+        board[pos] = color;
+        checkFinishedOrNot ();
+        return 1;
+    }
+
+    int Board::put (const int pos, const string color)
+    {
+        int color_id;
+        if (color == CYCLE_SIGN)
+            color_id = CYCLE;
+        else if (color == CROSS_SIGN)
+            color_id = CROSS;
+        else
+        {
+            std::cerr << "no exist such a color : " << color << std::endl;
+            return 0;
+        }
+
+        return put (pos, color_id);
+    }
+
+    int Board::isFull ()
+    {
+        for (int i = 0; i < BOARD_SIZE; i++)
+        {
+            if (board[i] == EMPTY)
+                return 0;
+        }
+        return 1;
+    }
+
+    void Board::checkFinishedOrNot ()
+    {
+        int i, j, sum;
+        for (i = 0; i < CHECK_ID_ARRAY_SIZE; i++)
+        {
+            sum = 0;
+            for (j = 0; j < CHECK_ID_ARRAY_SIDE_SIZE; j++)
+            {
+                sum += board[checkIdArray[i][j]];
+            }
+            //std::cerr << i << ": " << sum << std::endl;
+            if ((sum == CYCLE_SUM) || (sum == CROSS_SUM))
+            {
+                finishedFlag = 1;
+                result = sum == CYCLE_SUM ? CYCLE_WIN : CROSS_WIN;
+                break;
+            }
+        }
+        if (isFull ())
+        {
+            result = DRAW;
+            finishedFlag = 1;
+        }
     }
 }

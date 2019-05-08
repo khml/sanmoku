@@ -8,33 +8,36 @@
 #include "Player.hpp"
 #include "Board.hpp"
 
-Player::Player () { }
-
-Player::Player (const Player& orig) { }
-
-Player::~Player () { }
-
-int Player::getRandomPos ()
+namespace sanmoku
 {
-  return rand () % BOARD_SIZE;
-}
+    Player::Player () { }
 
-int Player::play (Board& board)
-{
-  int pos;
+    Player::Player (const Player& orig) { }
 
-  if (board.isFinished ())
-    return 0;
+    Player::~Player () { }
 
-  while (true)
+    int Player::getRandomPos ()
     {
-      pos = getRandomPos ();
-      if (board.isLegal (pos))
-        break;
+        return rand () % BOARD_SIZE;
     }
 
-  board.put (pos, toPlayColor);
-  toPlayColor = toPlayColor == CROSS ? CYCLE : CROSS;
+    int Player::play (Board& board)
+    {
+        int pos;
 
-  return 1;
+        if (board.isFinished ())
+            return 0;
+
+        while (true)
+        {
+            pos = getRandomPos ();
+            if (board.isLegal (pos))
+                break;
+        }
+
+        board.put (pos, toPlayColor);
+        toPlayColor = toPlayColor == CROSS ? CYCLE : CROSS;
+
+        return 1;
+    }
 }

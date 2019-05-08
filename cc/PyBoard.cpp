@@ -2,6 +2,8 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/numpy.h>
 
+using sanmoku::Board;
+
 namespace py = pybind11;
 
 class PyBoard
