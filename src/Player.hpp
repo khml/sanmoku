@@ -18,11 +18,11 @@ namespace sanmoku
         Player ();
         Player (const Player& orig);
         virtual ~Player ();
-        int toPlayColor = CROSS;
-        int play (Board& board);
+        Color toPlayColor = Cross;
+        bool play (Board& board);
     private:
         std::random_device rand;
-        int getRandomPos ();
+        Move getRandomPos ();
 
     };
 }

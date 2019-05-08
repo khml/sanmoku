@@ -25,14 +25,14 @@ using sanmoku::Player;
  * 
  */
 
-void checkResult (Board& board)
+void printResult(Board &board)
 {
   string result;
-  if (board.result == DRAW)
+  if (board.result == sanmoku::Empty)
     result = "Draw";
   else
     {
-      result = board.result == CYCLE_WIN ? CYCLE_SYMBOL : CROSS_SYMBOL;
+      result = board.result == sanmoku::Cycle ? CYCLE_SYMBOL : CROSS_SYMBOL;
     }
   cerr << "game finished! result : " << result << endl;
 }
@@ -46,24 +46,35 @@ void playMode ()
 
   cerr << "color(o or x),pos (e.g. o3)" << endl << endl;
 
-  string cmd, color;
+  string cmd, strColor;
+  sanmoku::Color color;
   int pos;
-  while (true)
+    while (true)
     {
-      cerr << "input = ";
-      cin >> cmd;
-      pos = stoi (cmd.substr (1, 1));
-      color = cmd.substr (0, 1);
+        cerr << "input = ";
+        cin >> cmd;
+        pos = stoi(cmd.substr(1, 1));
+        strColor = cmd.substr(0, 1);
 
-      if (board.put (pos, color))
-        board.printBoard ();
-      else
-        cerr << "Ilegal move" << endl;
-
-      if (board.isFinished ())
+        if (strColor == CYCLE_SYMBOL)
+            color = sanmoku::Cycle;
+        else if (strColor == CROSS_SYMBOL)
+            color = sanmoku::Cross;
+        else
         {
-          checkResult (board);
-          break;
+            cerr << "Illegal color" << endl;
+            continue;
+        }
+
+        if (board.put(sanmoku::Move(color, pos)))
+            board.printBoard();
+        else
+            cerr << "Ilegal move" << endl;
+
+        if (board.isFinished())
+        {
+            printResult(board);
+            break;
         }
     }
 }
@@ -79,7 +90,7 @@ void selfMode ()
       board.printBoard ();
       if (board.isFinished ())
         {
-          checkResult (board);
+            printResult(board);
           break;
         }
     }

@@ -16,28 +16,26 @@ namespace sanmoku
 
     Player::~Player () { }
 
-    int Player::getRandomPos ()
+    Move Player::getRandomPos ()
     {
-        return rand () % BOARD_SIZE;
+        return {toPlayColor, (int) rand () % BOARD_SIZE};
     }
 
-    int Player::play (Board& board)
+    bool Player::play (Board& board)
     {
-        int pos;
-
         if (board.isFinished ())
-            return 0;
+            return false;
 
         while (true)
         {
-            pos = getRandomPos ();
-            if (board.isLegal (pos))
+            Move move = getRandomPos ();
+            if (board.isLegal (move))
+            {
+                board.put (move);
                 break;
+            }
         }
-
-        board.put (pos, toPlayColor);
-        toPlayColor = toPlayColor == CROSS ? CYCLE : CROSS;
-
-        return 1;
+        toPlayColor = (toPlayColor == Cross ? Cycle : Cross);
+        return true;
     }
 }

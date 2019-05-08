@@ -8,8 +8,6 @@
 #include <string>
 #include "Board.hpp"
 
-#define CYCLE_SUM CYCLE *3
-#define CROSS_SUM CROSS *3
 #define CYCLE_SIGN "o"
 #define CROSS_SIGN "x"
 #define EMPTY_SIGN "."
@@ -30,11 +28,11 @@ namespace sanmoku
         for (int pos = 0; pos < BOARD_SIZE; pos++)
         {
             id = board[pos];
-            if (id == EMPTY)
+            if (id == Empty)
                 sign = EMPTY_SIGN;
-            else if (id == CYCLE)
+            else if (id == Cycle)
                 sign = CYCLE_SIGN;
-            else if (id == CROSS)
+            else if (id == Cross)
                 sign = CROSS_SIGN;
             else
             {
@@ -49,91 +47,64 @@ namespace sanmoku
         std::cerr << std::endl;
     }
 
-    string Board::asString ()
+
+    bool Board::isAny(int pos, sanmoku::Color color)
     {
-        string stringBoard = std::to_string (board[0]);
-        for (int i = 1; i < BOARD_SIZE; i++)
-        {
-            stringBoard += "," + std::to_string (board[i]);
-        }
-        return stringBoard;
+        return board[pos] == color;
     }
 
-    int Board::isAny (const int pos, const int id)
+    bool Board::isEmpty (const int pos)
     {
-        if (board[pos] == id)
-            return 1;
-        return 0;
+        return isAny (pos, Empty);
     }
 
-    int Board::isEmpty (const int pos)
+    bool Board::isCross (const int pos)
     {
-        return isAny (pos, EMPTY);
+        return isAny (pos, Cross);
     }
 
-    int Board::isCross (const int pos)
+    bool Board::isCycle (const int pos)
     {
-        return isAny (pos, CROSS);
+        return isAny (pos, Cycle);
     }
 
-    int Board::isCycle (const int pos)
+    bool Board::isLegal (const Move move)
     {
-        return isAny (pos, CYCLE);
+        return isEmpty (move.pos);
     }
 
-    int Board::isLegal (const int pos)
-    {
-        if (isEmpty (pos))
-            return 1;
-        return 0;
-    }
-
-    int Board::isFinished ()
+    bool Board::isFinished ()
     {
         return finishedFlag;
     }
 
-    int Board::put (const int pos, const int color)
+    bool Board::put (const Move move)
     {
         if (finishedFlag)
-            return 0;
+            return false;
 
-        if (!isLegal (pos))
-            return 0;
+        if (!isLegal (move))
+            return false;
 
-        board[pos] = color;
+        board[move.pos] = move.color;
         checkFinishedOrNot ();
-        return 1;
+        return true;
     }
 
-    int Board::put (const int pos, const string color)
-    {
-        int color_id;
-        if (color == CYCLE_SIGN)
-            color_id = CYCLE;
-        else if (color == CROSS_SIGN)
-            color_id = CROSS;
-        else
-        {
-            std::cerr << "no exist such a color : " << color << std::endl;
-            return 0;
-        }
-
-        return put (pos, color_id);
-    }
-
-    int Board::isFull ()
+    bool Board::isFull ()
     {
         for (int i = 0; i < BOARD_SIZE; i++)
         {
-            if (board[i] == EMPTY)
-                return 0;
+            if (isEmpty(i))
+                return false;
         }
-        return 1;
+        return true;
     }
 
     void Board::checkFinishedOrNot ()
     {
+        int cycleSum = 3 * (int) Cycle;
+        int crossSum = 3 * (int) Cross;
         int i, j, sum;
         for (i = 0; i < CHECK_ID_ARRAY_SIZE; i++)
         {
@@ -142,18 +113,18 @@ namespace sanmoku
             {
                 sum += board[checkIdArray[i][j]];
             }
-            //std::cerr << i << ": " << sum << std::endl;
-            if ((sum == CYCLE_SUM) || (sum == CROSS_SUM))
+
+            if ((sum == cycleSum) || (sum == crossSum))
             {
-                finishedFlag = 1;
-                result = sum == CYCLE_SUM ? CYCLE_WIN : CROSS_WIN;
+                finishedFlag = true;
+                result = (sum == cycleSum ? Cycle : Cross);
                 break;
             }
         }
         if (isFull ())
         {
-            result = DRAW;
-            finishedFlag = 1;
+            result = Empty;
+            finishedFlag = true;
         }
     }
 }
