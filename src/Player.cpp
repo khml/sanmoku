@@ -22,10 +22,18 @@ namespace sanmoku
     Move Player::genMove(sanmoku::Board &board)
     {
         auto policy = model.infer(board.getBoard());
-        std::discrete_distribution<std::size_t> dist(policy.begin(), policy.end());
-        std::mt19937 engine(rand());
-        std::size_t pos = dist(engine);
-        return {toPlayColor, (int) pos};
+
+        while (true)
+        {
+            std::discrete_distribution<std::size_t> dist(policy.begin(), policy.end());
+            std::mt19937 engine(rand());
+            std::size_t pos = dist(engine);
+            Move move(toPlayColor, (int) pos);
+            if (board.isLegal(move))
+                return move;
+            policy.erase(policy.begin() + pos);
+        }
+
     }
 
     bool Player::play (Board& board)
