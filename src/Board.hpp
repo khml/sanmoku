@@ -32,6 +32,21 @@ namespace sanmoku
         const int pos;
     };
 
+    template <typename T>
+    class MoveHistory
+    {
+    public:
+        MoveHistory();
+        MoveHistory(const MoveHistory& orig);
+        virtual ~MoveHistory();
+        void add(std::vector<T> board, Move move);
+        void clear();
+        std::vector<std::tuple<std::vector<T>, Move>> data();
+    protected:
+        std::vector<std::vector<T>> boards;
+        std::vector<Move> moves;
+    };
+
     class Board
     {
     public:
@@ -43,6 +58,7 @@ namespace sanmoku
         bool isFinished ();
         void printBoard ();
         Color result = Empty;
+        MoveHistory<float> history;
         std::vector<float> getBoard ();
     private:
         Color board[BOARD_SIZE] ={

@@ -16,6 +16,45 @@ using std::vector;
 
 namespace sanmoku
 {
+    template <typename T>
+    MoveHistory<T>::MoveHistory()
+    {
+        boards = vector<vector<T>>();
+        moves = vector<Move>();
+    }
+
+    template <typename T>
+    MoveHistory<T>::MoveHistory(const sanmoku::MoveHistory<T> &orig): boards(orig.boards), moves(orig.moves){ }
+
+    template <typename T>
+    MoveHistory<T>::~MoveHistory(){}
+
+    template <typename T>
+    void MoveHistory<T>::add(std::vector<T> board, sanmoku::Move move)
+    {
+        boards.push_back(board);
+        moves.push_back(move);
+    }
+
+    template <typename T>
+    void MoveHistory<T>::clear()
+    {
+        boards.clear();
+        moves.clear();
+    }
+
+    template <typename T>
+    std::vector<std::tuple<std::vector<T>, Move>> MoveHistory<T>::data()
+    {
+        vector<std::tuple<vector<T>, Move>> vec;
+        for (int index = 0; index < moves.size(); index++)
+        {
+            vec.push_back(std::make_tuple(boards[index], moves[index]));
+        }
+        return vec;
+    }
+
+
     Board::Board () { }
 
     Board::Board (const Board& orig) { }
@@ -88,6 +127,7 @@ namespace sanmoku
         if (!isLegal (move))
             return false;
 
+        history.add(getBoard(), move);
         board[move.pos] = move.color;
         checkFinishedOrNot ();
         return true;
