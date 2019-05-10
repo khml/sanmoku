@@ -21,6 +21,8 @@ using sanmoku::Player;
 #define CYCLE_SYMBOL "o"
 #define CROSS_SYMBOL "x"
 
+#define MODEL_NAME "model.pt"
+
 /*
  * 
  */
@@ -83,6 +85,7 @@ void selfMode ()
 {
   Board board;
   Player player;
+  player.loadModel(MODEL_NAME);
 
   while (true)
     {
@@ -95,6 +98,7 @@ void selfMode ()
         }
     }
   player.train(board);
+  player.saveModel(MODEL_NAME);
 }
 
 void selectMode (string mode)

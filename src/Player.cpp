@@ -4,6 +4,8 @@
  * and open the template in the editor.
  */
 
+#include <fstream>
+
 #include "Player.hpp"
 
 using std::vector;
@@ -20,7 +22,7 @@ namespace sanmoku
 {
     Player::Player () { }
 
-    Player::Player (const Player& orig) { }
+    Player::Player (const Player& orig) : toPlayColor(orig.toPlayColor), model(orig.model) { }
 
     Player::~Player () { }
 
@@ -31,7 +33,7 @@ namespace sanmoku
 
     Move Player::genMove(sanmoku::Board &board)
     {
-        auto policy = model.infer(board.getBoard());
+        auto policy = model->infer(board.getBoard());
         vector<int> posIndices = {0, 1, 2, 3, 4, 5, 6, 7, 8};
 
         while (true)
@@ -74,8 +76,8 @@ namespace sanmoku
             return;
         }
 
-        model.train();
-        torch::optim::SGD optimizer(model.parameters(), torch::optim::SGDOptions(0.01).momentum(0.5));
+        model->train();
+        torch::optim::SGD optimizer(model->parameters(), torch::optim::SGDOptions(0.01).momentum(0.5));
 
         optimizer.zero_grad();
         for(auto item : board.history.data())
@@ -86,12 +88,27 @@ namespace sanmoku
 
             auto data = tensor(get<0>(item)).view({-1, 9});
             auto label = tensor(move.pos, torch::kLong);
-            auto out = model.forward(data);
+            auto out = model->forward(data);
 
             auto loss = nll_loss(out, label);
             cerr << "Loss = " << *(loss.template data<float>()) << endl;
             loss.backward();
         }
         optimizer.step();
+    }
+
+    bool Player::loadModel(std::string modelName)
+    {
+        std::ifstream ifs(modelName);
+        if (! ifs.is_open())
+            return false;
+
+        torch::load(model, modelName);
+        return true;
+    }
+
+    void Player::saveModel(std::string modelName)
+    {
+        torch::save(model, modelName);
     }
 }

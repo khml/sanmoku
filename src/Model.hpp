@@ -32,12 +32,12 @@ namespace sanmoku
         return vec;
     }
 
-    struct Net : torch::nn::Module
+    struct NetImpl : torch::nn::Module
     {
         torch::nn::Linear fc1;
         torch::nn::Linear fc2;
 
-        Net() : fc1(9, 18), fc2(18, 9)
+        NetImpl() : fc1(9, 18), fc2(18, 9)
         {
             register_module("fc1", fc1);
             register_module("fc2", fc2);
@@ -60,6 +60,8 @@ namespace sanmoku
             return toVector(predict);
         }
     };
+
+    TORCH_MODULE(Net);
 
 }
 
