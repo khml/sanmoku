@@ -32,16 +32,18 @@ namespace sanmoku
     Move Player::genMove(sanmoku::Board &board)
     {
         auto policy = model.infer(board.getBoard());
+        vector<int> posIndices = {0, 1, 2, 3, 4, 5, 6, 7, 8};
 
         while (true)
         {
             std::discrete_distribution<std::size_t> dist(policy.begin(), policy.end());
             std::mt19937 engine(rand());
-            std::size_t pos = dist(engine);
-            Move move(toPlayColor, (int) pos);
+            std::size_t index = dist(engine);
+            Move move(toPlayColor, posIndices[(int) index]);
             if (board.isLegal(move))
                 return move;
-            policy.erase(policy.begin() + pos);
+            policy.erase(policy.begin() + index);
+            posIndices.erase(posIndices.begin() + index);
         }
 
     }
