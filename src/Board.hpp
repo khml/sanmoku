@@ -8,6 +8,7 @@
 #define BOARD_HPP
 
 #include <string>
+#include <vector>
 
 #define BOARD_SIZE 9
 #define CHECK_ID_ARRAY_SIZE 8
@@ -31,17 +32,35 @@ namespace sanmoku
         const int pos;
     };
 
+    template <typename T>
+    class MoveHistory
+    {
+    public:
+        MoveHistory();
+        MoveHistory(const MoveHistory& orig);
+        virtual ~MoveHistory();
+        void add(std::vector<T> board, Move move);
+        void clear();
+        std::vector<std::tuple<std::vector<T>, Move>> data();
+    protected:
+        std::vector<std::vector<T>> boards;
+        std::vector<Move> moves;
+    };
+
     class Board
     {
     public:
         Board ();
         Board (const Board& orig);
         virtual ~Board ();
+        void clear();
         bool put (Move move);
         bool isLegal (Move move);
         bool isFinished ();
         void printBoard ();
         Color result = Empty;
+        MoveHistory<float> history;
+        std::vector<float> getBoard ();
     private:
         Color board[BOARD_SIZE] ={
                 Empty, Empty, Empty,
