@@ -54,6 +54,16 @@ namespace sanmoku
         return vec;
     }
 
+    template <>
+    std::vector<std::tuple<std::vector<float>, Move>> MoveHistory<float>::data()
+    {
+        vector<std::tuple<vector<float>, Move>> vec;
+        for (int index = 0; index < moves.size(); index++)
+        {
+            vec.push_back(std::make_tuple(boards[index], moves[index]));
+        }
+        return vec;
+    }
 
     Board::Board ()
     {

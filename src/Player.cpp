@@ -6,6 +6,16 @@
 
 #include "Player.hpp"
 
+using std::vector;
+using std::get;
+using std::cerr;
+using std::endl;
+
+using torch::tensor;
+using torch::Tensor;
+using torch::data::Example;
+using torch::nll_loss;
+
 namespace sanmoku
 {
     Player::Player () { }
@@ -52,5 +62,34 @@ namespace sanmoku
         }
         toPlayColor = (toPlayColor == Cross ? Cycle : Cross);
         return true;
+    }
+
+    void Player::train(sanmoku::Board &board)
+    {
+        if (board.result == Empty)
+        {
+            cerr << "result is DRAW, do not learning" << endl;
+            return;
+        }
+
+        model.train();
+        torch::optim::SGD optimizer(model.parameters(), torch::optim::SGDOptions(0.01).momentum(0.5));
+
+        optimizer.zero_grad();
+        for(auto item : board.history.data())
+        {
+            auto move = get<1>(item);
+            if (move.color == board.result)
+                continue;
+
+            auto data = tensor(get<0>(item)).view({-1, 9});
+            auto label = tensor(move.pos, torch::kLong);
+            auto out = model.forward(data);
+
+            auto loss = nll_loss(out, label);
+            cerr << "Loss = " << *(loss.template data<float>()) << endl;
+            loss.backward();
+        }
+        optimizer.step();
     }
 }

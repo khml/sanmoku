@@ -22,6 +22,7 @@ namespace sanmoku
         Color toPlayColor = Cross;
         bool play (Board& board);
         Move genMove(Board& board);
+        void train(Board& board);
     private:
         std::random_device rand;
         Move getRandomPos ();

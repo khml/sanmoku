@@ -94,6 +94,7 @@ void selfMode ()
           break;
         }
     }
+  player.train(board);
 }
 
 void selectMode (string mode)
