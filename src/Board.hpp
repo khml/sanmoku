@@ -53,6 +53,7 @@ namespace sanmoku
         Board ();
         Board (const Board& orig);
         virtual ~Board ();
+        void clear();
         bool put (Move move);
         bool isLegal (Move move);
         bool isFinished ();

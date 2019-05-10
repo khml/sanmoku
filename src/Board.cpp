@@ -55,11 +55,22 @@ namespace sanmoku
     }
 
 
-    Board::Board () { }
+    Board::Board ()
+    {
+        clear();
+    }
 
     Board::Board (const Board& orig) { }
 
     Board::~Board () { }
+
+    void Board::clear()
+    {
+        for (int i = 0; i < BOARD_SIZE; i++)
+            board[i] = Empty;
+        history.clear();
+    }
+
 
     void Board::printBoard ()
     {
