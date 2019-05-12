@@ -29,6 +29,9 @@ class Board:
         self._board = cc.Board()
         self._moves = MoveHistory()
 
+    def clear(self):
+        self.__init__()
+
     @property
     def moves(self):
         return self._moves
