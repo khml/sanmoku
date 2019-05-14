@@ -3,7 +3,7 @@
 import os
 
 from Board import Board, CROSS, CYCLE, DRAW, turn_color
-from Model import Model, choice_move, Trainer
+from Model import Model, choice_move_with_epsilon, Trainer
 from Loggers import get_io_stream_logger, Logger
 
 
@@ -11,7 +11,7 @@ def play_one_game(board: Board, model: Model, logger: Logger):
     color = CROSS
     while True:
         policy = model.infer(board.data(color))
-        pos = choice_move(policy, board, random=5)
+        pos = choice_move_with_epsilon(policy, board)
         if pos is False:
             logger.info("*** Move Choice Error ***")
             exit()

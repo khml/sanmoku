@@ -29,24 +29,42 @@ class Model(torch.nn.Module):
             return self(data).numpy()
 
 
-def choice_move(policy: np.ndarray, board: Board, random: int = 0):
-    p = policy.copy()
-    p -= p.min()
-    p /= sum(p)
+def normalize(ndarray: np.ndarray):
+    ndarray -= ndarray.min()
+    return ndarray / ndarray.sum()
 
-    for _ in range(random):
-        pos = np.random.choice(len(p), p=p)
-        if board.is_legal(pos):
-            return pos
-        p = p.tolist()
-        p.pop(pos)
-        p = np.array(p) / sum(p)
 
-    for pos in np.argsort(policy):
-        if board.is_legal(pos):
-            return pos
+def remove_illegal_move(policy: np.ndarray, board: Board) -> [np.ndarray, list]:
+    legal_policy = []
+    legal_pos = []
+    for pos in range(len(policy)):
+        if not board.is_legal(pos):
+            continue
+        legal_pos.append(pos)
+        legal_policy.append(policy[pos])
 
-    return False
+    return np.array(legal_policy), legal_pos
+
+
+def choice_move(policy: np.ndarray, board: Board):
+    policy, pos_list = remove_illegal_move(policy, board)
+    policy = normalize(policy)
+    index = np.random.choice(len(policy), p=policy)
+    pos = pos_list[index]
+    return pos
+
+
+def choice_move_with_epsilon(policy: np.ndarray, board: Board, epsilon=0.2):
+    policy, pos_list = remove_illegal_move(policy, board)
+    policy = normalize(policy)
+    if np.random.rand() <= epsilon:
+        index = np.random.choice(len(policy), p=policy)
+        pos = pos_list[index]
+        return pos
+
+    index = np.argmax(policy)
+    pos = pos_list[index]
+    return pos
 
 
 class Trainer:
