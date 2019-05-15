@@ -23,6 +23,7 @@ namespace sanmoku
         Empty = 0,
         Cycle = -1,
         Cross = 1,
+        OutOfRange = 2,
     };
 
     struct Move

@@ -39,9 +39,29 @@ void printResult(Board &board)
   cerr << "game finished! result : " << result << endl;
 }
 
-void playMode ()
+sanmoku::Color sringToColor(string strColor)
 {
+    sanmoku::Color color;
+    if (strColor == CYCLE_SYMBOL)
+        color = sanmoku::Cycle;
+    else if (strColor == CROSS_SYMBOL)
+        color = sanmoku::Cross;
+    else
+        color = sanmoku::OutOfRange;
+    return color;
+}
+
+void play(int argc, char** argv)
+{
+  string modelPath;
+  if (argc == 3)
+      modelPath = argv[2];
+  else
+      modelPath = MODEL_NAME;
+
   Board board;
+  Player player;
+  player.loadModel(modelPath);
 
   cerr << "Pos index" << endl;
   cerr << "0 1 2" << endl << "3 4 5" << endl << "6 7 8" << endl;
@@ -55,23 +75,39 @@ void playMode ()
     {
         cerr << "input = ";
         cin >> cmd;
-        pos = stoi(cmd.substr(1, 1));
-        strColor = cmd.substr(0, 1);
 
-        if (strColor == CYCLE_SYMBOL)
-            color = sanmoku::Cycle;
-        else if (strColor == CROSS_SYMBOL)
-            color = sanmoku::Cross;
+        if (cmd.substr(0, 3) == "gen")
+        {
+            strColor = cmd.substr(3, 1);
+            pos = -1;
+        }
         else
+        {
+            strColor = cmd.substr(0, 1);
+            pos = stoi(cmd.substr(1, 1));
+        }
+
+        color = sringToColor(strColor);
+        if (color == sanmoku::OutOfRange)
         {
             cerr << "Illegal color" << endl;
             continue;
         }
 
-        if (board.put(sanmoku::Move(color, pos)))
-            board.printBoard();
-        else
-            cerr << "Ilegal move" << endl;
+        if (pos >= 0)
+        {
+            if (board.put(sanmoku::Move(color, pos)))
+                board.printBoard();
+            else
+                cerr << "Ilegal move" << endl;
+        } else
+        {
+            player.toPlayColor = color;
+            if (player.play(board))
+                board.printBoard();
+            else
+                cerr << "Ilegal move" << endl;
+        }
 
         if (board.isFinished())
         {
@@ -81,56 +117,77 @@ void playMode ()
     }
 }
 
-void selfMode ()
+void train(int argc, char **argv)
 {
+  int trainingTimes;
+  string modelPath;
+  if (argc < 3)
+  {
+      cerr << "required more args" << endl;
+      cerr << "./sanmoku train TrainingTimes(required) modelPath(option)" << endl;
+      exit(0);
+  }
+
+  try
+  {
+      trainingTimes = std::stoi(argv[2]);
+  }
+  catch (const char* errMsg)
+  {
+      cerr << errMsg << endl;
+      exit(0);
+  }
+
+  if (argc == 4)
+      modelPath = argv[3];
+  else
+      modelPath = MODEL_NAME;
+
   Board board;
   Player player;
-  player.loadModel(MODEL_NAME);
+  player.loadModel(modelPath);
 
-  while (true)
-    {
-      player.play (board);
-      board.printBoard ();
-      if (board.isFinished ())
-        {
-            printResult(board);
-          break;
-        }
-    }
-  player.train(board);
-  player.saveModel(MODEL_NAME);
-}
-
-void selectMode (string mode)
-{
-  if (mode == "play")
-    playMode ();
-  else if (mode == "self")
-    selfMode ();
-  else
-    cerr << "no exist such a mode : " << mode;
-
+  for (int i = 0; i < trainingTimes; i++)
+  {
+      board.clear();
+      while (true)
+      {
+          player.play (board);
+          board.printBoard ();
+          if (board.isFinished ())
+          {
+              printResult(board);
+              break;
+          }
+      }
+      player.train(board);
+  }
+  player.saveModel(modelPath);
 }
 
 int main (int argc, char** argv)
 {
   string mode;
-  if (argc > 2)
+
+  if (argc < 2)
     {
-      cerr << "too many args" << endl;
+      cerr << "please select mode. train or play" << endl;
+      cerr << "./sanmoku train TrainingTimes(required) modelPath(option)" << endl;
+      cerr << "./sanmoku play modelPath(option)" << endl;
       exit (0);
     }
 
-  if (argc == 2)
-    mode = argv[1];
+  mode = argv[1];
 
-  if (argc == 1)
-    {
-      cerr << "choice mode (self or play) = ";
-      cin >> mode;
-    }
-
-  selectMode (mode);
+  if (mode == "train")
+      train(argc, argv);
+  else if (mode == "play")
+      play(argc, argv);
+  else
+  {
+      cerr << "not exist such a mode " << mode << endl;
+      exit(0);
+  }
 
   return 0;
 }
