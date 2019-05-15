@@ -4,108 +4,109 @@ This is Tic Tac Toe Program. Implemented by C++ and Python.
 
 Using [pybind11](https://github.com/pybind/pybind11), generate Python Sanmoku Module.
 
+# Required Library
+[LibTorch](https://pytorch.org/get-started/locally/)
+
 # build C++ src
 ```
 # build
 $ mkdir build && cd build
-$ cmake ..
+$ cmake -DCMAKE_PREFIX_PATH=/absolute/path/to/libtorch ..
 $ make 
 
-# execute
-./sanmoku
+# execute args
+```
+./sanmoku train TrainingTimes(required) modelPath(option)
+./sanmoku play modelPath(option)
+
 ```
 
-## self mode
+
+## train mode
 ```
-choice mode (self or play) = self
-., ., ., 
-., ., ., 
-x, ., ., 
+$ ./sanmoku train 1
 
-., ., ., 
-., ., ., 
-x, o, ., 
+., ., .,
+x, ., .,
+., ., .,
 
-., ., ., 
-., x, ., 
-x, o, ., 
+., ., o,
+x, ., .,
+., ., .,
 
-., ., ., 
-., x, o, 
-x, o, ., 
+., ., o,
+x, ., .,
+., x, .,
 
-., ., ., 
-., x, o, 
-x, o, x, 
+., ., o,
+x, ., .,
+o, x, .,
 
-., ., o, 
-., x, o, 
-x, o, x, 
+., x, o,
+x, ., .,
+o, x, .,
 
-x, ., o, 
-., x, o, 
-x, o, x, 
+., x, o,
+x, o, .,
+o, x, .,
 
-game finished! result : x
+game finished! result : o
+Loss = 2.17941
+Loss = 2.4002
+Loss = 2.02983
+
 ```
+
 
 ## play mode
 ```
-choice mode (self or play) = play       
+$ ./sanmoku play
+
 Pos index
 0 1 2
 3 4 5
 6 7 8
 color(o or x),pos (e.g. o3)
 
-input = x4
-., ., ., 
-., x, ., 
-., ., ., 
+input = genx
+., ., x,
+., ., .,
+., ., .,
 
-input = o0
-o, ., ., 
-., x, ., 
-., ., ., 
+input = geno
+., o, x,
+., ., .,
+., ., .,
 
-input = x1
-o, x, ., 
-., x, ., 
-., ., ., 
+input = o4
+., o, x,
+., o, .,
+., ., .,
 
-input = o7
-o, x, ., 
-., x, ., 
-., o, ., 
+input = genx
+., o, x,
+., o, .,
+., x, .,
 
-input = x3
-o, x, ., 
-x, x, ., 
-., o, ., 
-
-input = o5
-o, x, ., 
-x, x, o, 
-., o, ., 
+input = geno
+., o, x,
+., o, .,
+o, x, .,
 
 input = x8
-o, x, ., 
-x, x, o, 
-., o, x, 
+., o, x,
+., o, .,
+o, x, x,
 
-input = o2
-o, x, o, 
-x, x, o, 
-., o, x, 
+input = genx
+., o, x,
+., o, x,
+o, x, x,
 
-input = x6
-o, x, o, 
-x, x, o, 
-x, o, x, 
-
-game finished! result : Draw
+game finished! result : x
 
 ```
+
 
 # Training Sanmoku Player
 Using PyTorch and Sanmoku Module, training Sanmoku Neural Network Player with Python.
