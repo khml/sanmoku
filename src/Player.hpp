@@ -16,18 +16,29 @@ namespace sanmoku
     class Player
     {
     public:
-        Player ();
-        Player (const Player& orig);
-        virtual ~Player ();
+        Player();
+
+        Player(const Player &orig);
+
+        virtual ~Player();
+
         Color toPlayColor = Cross;
-        bool play (Board& board);
-        Move genMove(Board& board);
-        void train(Board& board);
+
+        bool play(Board &board);
+
+        Move genMove(Board &board);
+
+        void train(Board &board);
+
         bool loadModel(std::string modelName);
+
         void saveModel(std::string modelName);
+
     private:
         std::random_device rand;
-        Move getRandomPos ();
+
+        Move getRandomPos();
+
         Net model;
     };
 }

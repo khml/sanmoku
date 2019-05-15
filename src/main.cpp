@@ -29,14 +29,14 @@ using sanmoku::Player;
 
 void printResult(Board &board)
 {
-  string result;
-  if (board.result == sanmoku::Empty)
-    result = "Draw";
-  else
+    string result;
+    if (board.result == sanmoku::Empty)
+        result = "Draw";
+    else
     {
-      result = board.result == sanmoku::Cycle ? CYCLE_SYMBOL : CROSS_SYMBOL;
+        result = board.result == sanmoku::Cycle ? CYCLE_SYMBOL : CROSS_SYMBOL;
     }
-  cerr << "game finished! result : " << result << endl;
+    cerr << "game finished! result : " << result << endl;
 }
 
 sanmoku::Color sringToColor(string strColor)
@@ -51,26 +51,26 @@ sanmoku::Color sringToColor(string strColor)
     return color;
 }
 
-void play(int argc, char** argv)
+void play(int argc, char **argv)
 {
-  string modelPath;
-  if (argc == 3)
-      modelPath = argv[2];
-  else
-      modelPath = MODEL_NAME;
+    string modelPath;
+    if (argc == 3)
+        modelPath = argv[2];
+    else
+        modelPath = MODEL_NAME;
 
-  Board board;
-  Player player;
-  player.loadModel(modelPath);
+    Board board;
+    Player player;
+    player.loadModel(modelPath);
 
-  cerr << "Pos index" << endl;
-  cerr << "0 1 2" << endl << "3 4 5" << endl << "6 7 8" << endl;
+    cerr << "Pos index" << endl;
+    cerr << "0 1 2" << endl << "3 4 5" << endl << "6 7 8" << endl;
 
-  cerr << "color(o or x),pos (e.g. o3)" << endl << endl;
+    cerr << "color(o or x),pos (e.g. o3)" << endl << endl;
 
-  string cmd, strColor;
-  sanmoku::Color color;
-  int pos;
+    string cmd, strColor;
+    sanmoku::Color color;
+    int pos;
     while (true)
     {
         cerr << "input = ";
@@ -80,8 +80,7 @@ void play(int argc, char** argv)
         {
             strColor = cmd.substr(3, 1);
             pos = -1;
-        }
-        else
+        } else
         {
             strColor = cmd.substr(0, 1);
             pos = stoi(cmd.substr(1, 1));
@@ -119,76 +118,76 @@ void play(int argc, char** argv)
 
 void train(int argc, char **argv)
 {
-  int trainingTimes;
-  string modelPath;
-  if (argc < 3)
-  {
-      cerr << "required more args" << endl;
-      cerr << "./sanmoku train TrainingTimes(required) modelPath(option)" << endl;
-      exit(0);
-  }
-
-  try
-  {
-      trainingTimes = std::stoi(argv[2]);
-  }
-  catch (const char* errMsg)
-  {
-      cerr << errMsg << endl;
-      exit(0);
-  }
-
-  if (argc == 4)
-      modelPath = argv[3];
-  else
-      modelPath = MODEL_NAME;
-
-  Board board;
-  Player player;
-  player.loadModel(modelPath);
-
-  for (int i = 0; i < trainingTimes; i++)
-  {
-      board.clear();
-      while (true)
-      {
-          player.play (board);
-          board.printBoard ();
-          if (board.isFinished ())
-          {
-              printResult(board);
-              break;
-          }
-      }
-      player.train(board);
-  }
-  player.saveModel(modelPath);
-}
-
-int main (int argc, char** argv)
-{
-  string mode;
-
-  if (argc < 2)
+    int trainingTimes;
+    string modelPath;
+    if (argc < 3)
     {
-      cerr << "please select mode. train or play" << endl;
-      cerr << "./sanmoku train TrainingTimes(required) modelPath(option)" << endl;
-      cerr << "./sanmoku play modelPath(option)" << endl;
-      exit (0);
+        cerr << "required more args" << endl;
+        cerr << "./sanmoku train TrainingTimes(required) modelPath(option)" << endl;
+        exit(0);
     }
 
-  mode = argv[1];
+    try
+    {
+        trainingTimes = std::stoi(argv[2]);
+    }
+    catch (const char *errMsg)
+    {
+        cerr << errMsg << endl;
+        exit(0);
+    }
 
-  if (mode == "train")
-      train(argc, argv);
-  else if (mode == "play")
-      play(argc, argv);
-  else
-  {
-      cerr << "not exist such a mode " << mode << endl;
-      exit(0);
-  }
+    if (argc == 4)
+        modelPath = argv[3];
+    else
+        modelPath = MODEL_NAME;
 
-  return 0;
+    Board board;
+    Player player;
+    player.loadModel(modelPath);
+
+    for (int i = 0; i < trainingTimes; i++)
+    {
+        board.clear();
+        while (true)
+        {
+            player.play(board);
+            board.printBoard();
+            if (board.isFinished())
+            {
+                printResult(board);
+                break;
+            }
+        }
+        player.train(board);
+    }
+    player.saveModel(modelPath);
+}
+
+int main(int argc, char **argv)
+{
+    string mode;
+
+    if (argc < 2)
+    {
+        cerr << "please select mode. train or play" << endl;
+        cerr << "./sanmoku train TrainingTimes(required) modelPath(option)" << endl;
+        cerr << "./sanmoku play modelPath(option)" << endl;
+        exit(0);
+    }
+
+    mode = argv[1];
+
+    if (mode == "train")
+        train(argc, argv);
+    else if (mode == "play")
+        play(argc, argv);
+    else
+    {
+        cerr << "not exist such a mode " << mode << endl;
+        exit(0);
+    }
+
+    return 0;
 }
 

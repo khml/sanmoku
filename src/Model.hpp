@@ -9,7 +9,7 @@
 
 namespace sanmoku
 {
-    template <typename T>
+    template<typename T>
     static torch::Tensor toTensor(std::vector<T> vector)
     {
         return torch::tensor(vector);
@@ -27,7 +27,7 @@ namespace sanmoku
         }
 
         std::vector<float> vec = std::vector<float>();
-        float* first = tensor.template data<float_t>();
+        float *first = tensor.template data<float_t>();
         vec.assign(first, &first[size]);
         return vec;
     }

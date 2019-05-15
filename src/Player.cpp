@@ -20,15 +20,18 @@ using torch::nll_loss;
 
 namespace sanmoku
 {
-    Player::Player () { }
+    Player::Player()
+    {}
 
-    Player::Player (const Player& orig) : toPlayColor(orig.toPlayColor), model(orig.model) { }
+    Player::Player(const Player &orig) : toPlayColor(orig.toPlayColor), model(orig.model)
+    {}
 
-    Player::~Player () { }
+    Player::~Player()
+    {}
 
-    Move Player::getRandomPos ()
+    Move Player::getRandomPos()
     {
-        return {toPlayColor, (int) rand () % BOARD_SIZE};
+        return {toPlayColor, (int) rand() % BOARD_SIZE};
     }
 
     Move Player::genMove(sanmoku::Board &board)
@@ -50,17 +53,17 @@ namespace sanmoku
 
     }
 
-    bool Player::play (Board& board)
+    bool Player::play(Board &board)
     {
-        if (board.isFinished ())
+        if (board.isFinished())
             return false;
 
         while (true)
         {
-            Move move = genMove (board);
-            if (board.isLegal (move))
+            Move move = genMove(board);
+            if (board.isLegal(move))
             {
-                board.put (move);
+                board.put(move);
                 break;
             }
         }
@@ -80,7 +83,7 @@ namespace sanmoku
         torch::optim::SGD optimizer(model->parameters(), torch::optim::SGDOptions(0.01).momentum(0.5));
 
         optimizer.zero_grad();
-        for(auto item : board.history.data())
+        for (auto item : board.history.data())
         {
             auto move = get<1>(item);
             if (move.color == board.result)
@@ -100,7 +103,7 @@ namespace sanmoku
     bool Player::loadModel(std::string modelName)
     {
         std::ifstream ifs(modelName);
-        if (! ifs.is_open())
+        if (!ifs.is_open())
             return false;
 
         torch::load(model, modelName);

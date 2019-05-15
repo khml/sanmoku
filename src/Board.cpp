@@ -16,34 +16,36 @@ using std::vector;
 
 namespace sanmoku
 {
-    template <typename T>
+    template<typename T>
     MoveHistory<T>::MoveHistory()
     {
         boards = vector<vector<T>>();
         moves = vector<Move>();
     }
 
-    template <typename T>
-    MoveHistory<T>::MoveHistory(const sanmoku::MoveHistory<T> &orig): boards(orig.boards), moves(orig.moves){ }
+    template<typename T>
+    MoveHistory<T>::MoveHistory(const sanmoku::MoveHistory<T> &orig): boards(orig.boards), moves(orig.moves)
+    {}
 
-    template <typename T>
-    MoveHistory<T>::~MoveHistory(){}
+    template<typename T>
+    MoveHistory<T>::~MoveHistory()
+    {}
 
-    template <typename T>
+    template<typename T>
     void MoveHistory<T>::add(std::vector<T> board, sanmoku::Move move)
     {
         boards.push_back(board);
         moves.push_back(move);
     }
 
-    template <typename T>
+    template<typename T>
     void MoveHistory<T>::clear()
     {
         boards.clear();
         moves.clear();
     }
 
-    template <typename T>
+    template<typename T>
     std::vector<std::tuple<std::vector<T>, Move>> MoveHistory<T>::data()
     {
         vector<std::tuple<vector<T>, Move>> vec;
@@ -54,7 +56,7 @@ namespace sanmoku
         return vec;
     }
 
-    template <>
+    template<>
     std::vector<std::tuple<std::vector<float>, Move>> MoveHistory<float>::data()
     {
         vector<std::tuple<vector<float>, Move>> vec;
@@ -65,14 +67,16 @@ namespace sanmoku
         return vec;
     }
 
-    Board::Board ()
+    Board::Board()
     {
         clear();
     }
 
-    Board::Board (const Board& orig) { }
+    Board::Board(const Board &orig)
+    {}
 
-    Board::~Board () { }
+    Board::~Board()
+    {}
 
     void Board::clear()
     {
@@ -82,7 +86,7 @@ namespace sanmoku
     }
 
 
-    void Board::printBoard ()
+    void Board::printBoard()
     {
         int id;
         std::string sign;
@@ -115,46 +119,46 @@ namespace sanmoku
         return board[pos] == color;
     }
 
-    bool Board::isEmpty (const int pos)
+    bool Board::isEmpty(const int pos)
     {
-        return isAny (pos, Empty);
+        return isAny(pos, Empty);
     }
 
-    bool Board::isCross (const int pos)
+    bool Board::isCross(const int pos)
     {
-        return isAny (pos, Cross);
+        return isAny(pos, Cross);
     }
 
-    bool Board::isCycle (const int pos)
+    bool Board::isCycle(const int pos)
     {
-        return isAny (pos, Cycle);
+        return isAny(pos, Cycle);
     }
 
-    bool Board::isLegal (const Move move)
+    bool Board::isLegal(const Move move)
     {
-        return isEmpty (move.pos);
+        return isEmpty(move.pos);
     }
 
-    bool Board::isFinished ()
+    bool Board::isFinished()
     {
         return finishedFlag;
     }
 
-    bool Board::put (const Move move)
+    bool Board::put(const Move move)
     {
         if (finishedFlag)
             return false;
 
-        if (!isLegal (move))
+        if (!isLegal(move))
             return false;
 
         history.add(getBoard(), move);
         board[move.pos] = move.color;
-        checkFinishedOrNot ();
+        checkFinishedOrNot();
         return true;
     }
 
-    bool Board::isFull ()
+    bool Board::isFull()
     {
         for (int i = 0; i < BOARD_SIZE; i++)
         {
@@ -164,7 +168,7 @@ namespace sanmoku
         return true;
     }
 
-    void Board::checkFinishedOrNot ()
+    void Board::checkFinishedOrNot()
     {
         int cycleSum = 3 * (int) Cycle;
         int crossSum = 3 * (int) Cross;
@@ -184,7 +188,7 @@ namespace sanmoku
                 break;
             }
         }
-        if (isFull ())
+        if (isFull())
         {
             result = Empty;
             finishedFlag = true;

@@ -28,21 +28,28 @@ namespace sanmoku
 
     struct Move
     {
-        Move(Color color, int pos) : color(color), pos(pos){};
+        Move(Color color, int pos) : color(color), pos(pos)
+        {};
         const Color color;
         const int pos;
     };
 
-    template <typename T>
+    template<typename T>
     class MoveHistory
     {
     public:
         MoveHistory();
-        MoveHistory(const MoveHistory& orig);
+
+        MoveHistory(const MoveHistory &orig);
+
         virtual ~MoveHistory();
+
         void add(std::vector<T> board, Move move);
+
         void clear();
+
         std::vector<std::tuple<std::vector<T>, Move>> data();
+
     protected:
         std::vector<std::vector<T>> boards;
         std::vector<Move> moves;
@@ -51,19 +58,29 @@ namespace sanmoku
     class Board
     {
     public:
-        Board ();
-        Board (const Board& orig);
-        virtual ~Board ();
+        Board();
+
+        Board(const Board &orig);
+
+        virtual ~Board();
+
         void clear();
-        bool put (Move move);
-        bool isLegal (Move move);
-        bool isFinished ();
-        void printBoard ();
+
+        bool put(Move move);
+
+        bool isLegal(Move move);
+
+        bool isFinished();
+
+        void printBoard();
+
         Color result = Empty;
         MoveHistory<float> history;
-        std::vector<float> getBoard ();
+
+        std::vector<float> getBoard();
+
     private:
-        Color board[BOARD_SIZE] ={
+        Color board[BOARD_SIZE] = {
                 Empty, Empty, Empty,
                 Empty, Empty, Empty,
                 Empty, Empty, Empty
@@ -77,16 +94,27 @@ namespace sanmoku
          */
         int checkIdArray[CHECK_ID_ARRAY_SIZE][CHECK_ID_ARRAY_SIZE] =
                 {
-                        {0, 1, 2}, {3, 4, 5}, {6, 7, 8}, //rows
-                        {0, 3, 6}, {1, 4, 7}, {2, 5, 8}, //columns
-                        {0, 4, 8}, {2, 4, 6} // diagonal
+                        {0, 1, 2},
+                        {3, 4, 5},
+                        {6, 7, 8}, //rows
+                        {0, 3, 6},
+                        {1, 4, 7},
+                        {2, 5, 8}, //columns
+                        {0, 4, 8},
+                        {2, 4, 6} // diagonal
                 };
         bool finishedFlag = false;
+
         void checkFinishedOrNot();
-        bool isAny (int pos, Color color);
-        bool isEmpty (int pos);
-        bool isCycle (int pos);
-        bool isCross (int pos);
+
+        bool isAny(int pos, Color color);
+
+        bool isEmpty(int pos);
+
+        bool isCycle(int pos);
+
+        bool isCross(int pos);
+
         bool isFull();
     };
 }
