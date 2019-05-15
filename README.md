@@ -13,12 +13,12 @@ Using [pybind11](https://github.com/pybind/pybind11), generate Python Sanmoku Mo
 $ mkdir build && cd build
 $ cmake -DCMAKE_PREFIX_PATH=/absolute/path/to/libtorch ..
 $ make 
+```
 
 # execute args
 ```
 ./sanmoku train TrainingTimes(required) modelPath(option)
 ./sanmoku play modelPath(option)
-
 ```
 
 
