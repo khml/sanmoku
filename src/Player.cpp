@@ -82,21 +82,26 @@ namespace sanmoku
         model->train();
         torch::optim::SGD optimizer(model->parameters(), torch::optim::SGDOptions(0.01).momentum(0.5));
 
-        optimizer.zero_grad();
+        // make batch of data and label
+        vector<torch::Tensor> dataStack;
+        vector<int> labelStack;
         for (auto item : board.history.data())
         {
             auto move = get<1>(item);
             if (move.color == board.result)
                 continue;
-
-            auto data = tensor(get<0>(item)).view({-1, 9});
-            auto label = tensor(move.pos, torch::kLong);
-            auto out = model->forward(data);
-
-            auto loss = nll_loss(out, label);
-            cerr << "Loss = " << *(loss.template data<float>()) << endl;
-            loss.backward();
+            dataStack.push_back(tensor(get<0>(item)));
+            labelStack.push_back(move.pos);
         }
+        auto data = torch::stack(dataStack);
+        auto labels = torch::tensor(labelStack, torch::kLong);
+
+        // learning
+        optimizer.zero_grad();
+        auto out = model->forward(data);
+        auto loss = nll_loss(out, labels);
+        cerr << "Loss = " << *(loss.template data<float>()) << endl;
+        loss.backward();
         optimizer.step();
     }
 
