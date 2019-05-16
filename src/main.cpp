@@ -39,7 +39,7 @@ void printResult(Board &board)
     cerr << "game finished! result : " << result << endl;
 }
 
-sanmoku::Color sringToColor(string strColor)
+sanmoku::Color stringToColor(string strColor)
 {
     sanmoku::Color color;
     if (strColor == CYCLE_SYMBOL)
@@ -86,7 +86,7 @@ void play(int argc, char **argv)
             pos = stoi(cmd.substr(1, 1));
         }
 
-        color = sringToColor(strColor);
+        color = stringToColor(strColor);
         if (color == sanmoku::OutOfRange)
         {
             cerr << "Illegal color" << endl;
