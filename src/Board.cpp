@@ -80,6 +80,8 @@ namespace sanmoku
 
     void Board::clear()
     {
+        finishedFlag = false;
+        result = Empty;
         for (int i = 0; i < BOARD_SIZE; i++)
             board[i] = Empty;
         history.clear();
