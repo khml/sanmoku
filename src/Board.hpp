@@ -26,6 +26,8 @@ namespace sanmoku
         OutOfRange = 2,
     };
 
+    Color turnColor(Color color);
+
     struct Move
     {
         Move(Color color, int pos) : color(color), pos(pos)
@@ -48,7 +50,7 @@ namespace sanmoku
 
         void clear();
 
-        std::vector<std::tuple<std::vector<T>, Move>> data();
+        std::vector<std::tuple<std::vector<T>, Move>> data(Color color);
 
     protected:
         std::vector<std::vector<T>> boards;

@@ -47,7 +47,7 @@ namespace sanmoku
         {
             x = torch::relu(fc1->forward(x));
             x = fc2->forward(x);
-            return torch::log_softmax(x, /*dim=*/1);
+            return torch::softmax(x, /*dim=*/1);
         }
 
         std::vector<float> infer(std::vector<float> vec)

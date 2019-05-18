@@ -8,6 +8,8 @@
 
 #include "Player.hpp"
 
+#define GAMMA 0.8
+
 using std::vector;
 using std::get;
 using std::cerr;
@@ -15,8 +17,8 @@ using std::endl;
 
 using torch::tensor;
 using torch::Tensor;
-using torch::data::Example;
-using torch::nll_loss;
+using torch::softmax;
+using torch::binary_cross_entropy;
 
 namespace sanmoku
 {
@@ -67,8 +69,35 @@ namespace sanmoku
                 break;
             }
         }
-        toPlayColor = (toPlayColor == Cross ? Cycle : Cross);
+        toPlayColor = turnColor(toPlayColor);
         return true;
+    }
+
+    void Player::makeDataset(MoveHistory<float> &history, Color color, float lastReward, vector<Tensor> &dataStack,
+                             vector<Tensor> &labelStack)
+    {
+        auto targetData = history.data(color);
+        for (int i = 0; i < targetData.size(); i++)
+        {
+            auto data = get<0>(targetData[i]);
+            dataStack.push_back(torch::tensor(data));
+
+            auto label = torch::tensor(model->infer(data));
+            auto move = get<1>(targetData[i]);
+
+            if (i == targetData.size() - 1) // last
+            {
+                label[move.pos] += lastReward;
+                labelStack.push_back(label);
+                continue;
+            }
+
+            auto next = get<0>(targetData[i + 1]);
+            auto futureValue = torch::tensor(model->infer(next));
+            label[move.pos] += GAMMA * futureValue.max();
+            label = softmax(label, 0);
+            labelStack.push_back(label);
+        }
     }
 
     void Player::train(sanmoku::Board &board)
@@ -82,24 +111,17 @@ namespace sanmoku
         model->train();
         torch::optim::SGD optimizer(model->parameters(), torch::optim::SGDOptions(0.01).momentum(0.5));
 
-        // make batch of data and label
-        vector<torch::Tensor> dataStack;
-        vector<int> labelStack;
-        for (auto item : board.history.data())
-        {
-            auto move = get<1>(item);
-            if (move.color == board.result)
-                continue;
-            dataStack.push_back(tensor(get<0>(item)));
-            labelStack.push_back(move.pos);
-        }
+        vector<Tensor> dataStack;
+        vector<Tensor> labelStack;
+        makeDataset(board.history, board.result, 1.0, dataStack, labelStack);
+        makeDataset(board.history, turnColor(board.result), 0.0, dataStack, labelStack);
         auto data = torch::stack(dataStack);
-        auto labels = torch::tensor(labelStack, torch::kLong);
+        auto labels = torch::stack(labelStack);
 
         // learning
         optimizer.zero_grad();
         auto out = model->forward(data);
-        auto loss = nll_loss(out, labels);
+        auto loss = binary_cross_entropy(out, labels);
         cerr << "Loss = " << *(loss.template data<float>()) << endl;
         loss.backward();
         optimizer.step();

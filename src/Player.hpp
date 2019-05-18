@@ -39,6 +39,9 @@ namespace sanmoku
 
         Move getRandomPos();
 
+        void makeDataset(MoveHistory<float> &history, Color color, float lastReward,
+                         std::vector<torch::Tensor> &dataStack, std::vector<torch::Tensor> &labelStack);
+
         Net model;
     };
 }
