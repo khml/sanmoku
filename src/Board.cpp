@@ -195,7 +195,7 @@ namespace sanmoku
             {
                 finishedFlag = true;
                 result = (sum == cycleSum ? Cycle : Cross);
-                break;
+                return;
             }
         }
         if (isFull())
