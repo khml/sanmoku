@@ -25,35 +25,11 @@ namespace sanmoku
     Player::Player()
     {}
 
-    Player::Player(const Player &orig) : toPlayColor(orig.toPlayColor), model(orig.model)
+    Player::Player(const Player &orig) : toPlayColor(orig.toPlayColor)
     {}
 
     Player::~Player()
     {}
-
-    Move Player::getRandomPos()
-    {
-        return {toPlayColor, (int) rand() % BOARD_SIZE};
-    }
-
-    Move Player::genMove(sanmoku::Board &board)
-    {
-        auto policy = model->infer(board.getBoard());
-        vector<int> posIndices = {0, 1, 2, 3, 4, 5, 6, 7, 8};
-
-        while (true)
-        {
-            std::discrete_distribution<std::size_t> dist(policy.begin(), policy.end());
-            std::mt19937 engine(rand());
-            std::size_t index = dist(engine);
-            Move move(toPlayColor, posIndices[(int) index]);
-            if (board.isLegal(move))
-                return move;
-            policy.erase(policy.begin() + index);
-            posIndices.erase(posIndices.begin() + index);
-        }
-
-    }
 
     bool Player::play(Board &board)
     {
@@ -62,7 +38,7 @@ namespace sanmoku
 
         while (true)
         {
-            Move move = genMove(board);
+            Move move = genMove(board, toPlayColor);
             if (board.isLegal(move))
             {
                 board.put(move);
@@ -73,34 +49,49 @@ namespace sanmoku
         return true;
     }
 
-    void Player::makeDataset(MoveHistory<float> &history, Color color, float lastReward, vector<Tensor> &dataStack,
-                             vector<Tensor> &labelStack)
+    RandomPlayer::RandomPlayer()
+    {}
+
+    RandomPlayer::RandomPlayer(sanmoku::RandomPlayer &orig)
+    {}
+
+    RandomPlayer::~RandomPlayer()
+    {}
+
+    Move RandomPlayer::genMove(sanmoku::Board &board, Color color)
     {
-        auto targetData = history.data(color);
-        for (int i = 0; i < targetData.size(); i++)
-        {
-            auto data = get<0>(targetData[i]);
-            dataStack.push_back(torch::tensor(data));
-
-            auto label = torch::tensor(model->infer(data));
-            auto move = get<1>(targetData[i]);
-
-            if (i == targetData.size() - 1) // last
-            {
-                label[move.pos] += lastReward;
-                labelStack.push_back(label);
-                continue;
-            }
-
-            auto next = get<0>(targetData[i + 1]);
-            auto futureValue = torch::tensor(model->infer(next));
-            label[move.pos] += GAMMA * futureValue.max();
-            label = softmax(label, 0);
-            labelStack.push_back(label);
-        }
+        return {color, (int) rand() % BOARD_SIZE};
     }
 
-    void Player::train(sanmoku::Board &board)
+    NNPlayer::NNPlayer()
+    {}
+
+    NNPlayer::NNPlayer(sanmoku::NNPlayer &orig) : model(orig.model)
+    {}
+
+    NNPlayer::~NNPlayer()
+    {}
+
+    Move NNPlayer::genMove(sanmoku::Board &board, Color color)
+    {
+        auto policy = model->infer(board.getBoard());
+        vector<int> posIndices = {0, 1, 2, 3, 4, 5, 6, 7, 8};
+
+        while (true)
+        {
+            std::discrete_distribution<std::size_t> dist(policy.begin(), policy.end());
+            std::mt19937 engine(randomDevice());
+            std::size_t index = dist(engine);
+            Move move(color, posIndices[(int) index]);
+            if (board.isLegal(move))
+                return move;
+            policy.erase(policy.begin() + index);
+            posIndices.erase(posIndices.begin() + index);
+        }
+
+    }
+
+    void NNPlayer::train(sanmoku::Board &board)
     {
         if (board.result == Empty)
         {
@@ -127,7 +118,34 @@ namespace sanmoku
         optimizer.step();
     }
 
-    bool Player::loadModel(std::string modelName)
+    void NNPlayer::makeDataset(sanmoku::MoveHistory<float> &history, sanmoku::Color color, float lastReward,
+                               std::vector<torch::Tensor> &dataStack, std::vector<torch::Tensor> &labelStack)
+    {
+        auto targetData = history.data(color);
+        for (int i = 0; i < targetData.size(); i++)
+        {
+            auto data = get<0>(targetData[i]);
+            dataStack.push_back(torch::tensor(data));
+
+            auto label = torch::tensor(model->infer(data));
+            auto move = get<1>(targetData[i]);
+
+            if (i == targetData.size() - 1) // last
+            {
+                label[move.pos] += lastReward;
+                labelStack.push_back(label);
+                continue;
+            }
+
+            auto next = get<0>(targetData[i + 1]);
+            auto futureValue = torch::tensor(model->infer(next));
+            label[move.pos] += GAMMA * futureValue.max();
+            label = softmax(label, 0);
+            labelStack.push_back(label);
+        }
+    }
+
+    bool NNPlayer::loadModel(std::string modelName)
     {
         std::ifstream ifs(modelName);
         if (!ifs.is_open())
@@ -137,8 +155,9 @@ namespace sanmoku
         return true;
     }
 
-    void Player::saveModel(std::string modelName)
+    void NNPlayer::saveModel(std::string modelName)
     {
         torch::save(model, modelName);
     }
+
 }
