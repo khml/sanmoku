@@ -16,6 +16,12 @@ using std::vector;
 
 namespace sanmoku
 {
+    Color turnColor(Color color)
+    {
+        Color turnedColor = color == Cross ? Cycle : Cross;
+        return turnedColor;
+    }
+
     template<typename T>
     MoveHistory<T>::MoveHistory()
     {
@@ -46,7 +52,7 @@ namespace sanmoku
     }
 
     template<typename T>
-    std::vector<std::tuple<std::vector<T>, Move>> MoveHistory<T>::data()
+    std::vector<std::tuple<std::vector<T>, Move>> MoveHistory<T>::data(Color color)
     {
         vector<std::tuple<vector<T>, Move>> vec;
         for (int index = 0; index < moves.size(); index++)
@@ -57,12 +63,14 @@ namespace sanmoku
     }
 
     template<>
-    std::vector<std::tuple<std::vector<float>, Move>> MoveHistory<float>::data()
+    std::vector<std::tuple<std::vector<float>, Move>> MoveHistory<float>::data(Color color)
     {
         vector<std::tuple<vector<float>, Move>> vec;
         for (int index = 0; index < moves.size(); index++)
         {
-            vec.push_back(std::make_tuple(boards[index], moves[index]));
+            if (moves[index].color != color)
+                continue;
+            vec.emplace_back(std::make_tuple(boards[index], moves[index]));
         }
         return vec;
     }
@@ -187,7 +195,7 @@ namespace sanmoku
             {
                 finishedFlag = true;
                 result = (sum == cycleSum ? Cycle : Cross);
-                break;
+                return;
             }
         }
         if (isFull())

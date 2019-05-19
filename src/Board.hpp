@@ -26,6 +26,8 @@ namespace sanmoku
         OutOfRange = 2,
     };
 
+    Color turnColor(Color color);
+
     struct Move
     {
         Move(Color color, int pos) : color(color), pos(pos)
@@ -48,7 +50,7 @@ namespace sanmoku
 
         void clear();
 
-        std::vector<std::tuple<std::vector<T>, Move>> data();
+        std::vector<std::tuple<std::vector<T>, Move>> data(Color color);
 
     protected:
         std::vector<std::vector<T>> boards;
@@ -92,16 +94,16 @@ namespace sanmoku
          * 3 4 5
          * 6 7 8
          */
-        int checkIdArray[CHECK_ID_ARRAY_SIZE][CHECK_ID_ARRAY_SIZE] =
+        int checkIdArray[CHECK_ID_ARRAY_SIZE][CHECK_ID_ARRAY_SIDE_SIZE] =
                 {
-                        {0, 1, 2},
-                        {3, 4, 5},
+                        {0, 1, 2}, //rows
+                        {3, 4, 5}, //rows
                         {6, 7, 8}, //rows
-                        {0, 3, 6},
-                        {1, 4, 7},
+                        {0, 3, 6}, //columns
+                        {1, 4, 7}, //columns
                         {2, 5, 8}, //columns
-                        {0, 4, 8},
-                        {2, 4, 6} // diagonal
+                        {0, 4, 8}, // diagonal
+                        {2, 4, 6}, // diagonal
                 };
         bool finishedFlag = false;
 

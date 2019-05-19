@@ -26,7 +26,34 @@ namespace sanmoku
 
         bool play(Board &board);
 
-        Move genMove(Board &board);
+        virtual Move genMove(Board &board, Color color) = 0;
+    };
+
+    class RandomPlayer : public Player
+    {
+    public:
+        RandomPlayer();
+
+        RandomPlayer(RandomPlayer &orig);
+
+        virtual ~RandomPlayer();
+
+        Move genMove(Board &board, Color color) override;
+
+    protected:
+        std::random_device rand;
+    };
+
+    class NNPlayer : public Player
+    {
+    public:
+        NNPlayer();
+
+        NNPlayer(NNPlayer &orig);
+
+        virtual ~NNPlayer();
+
+        Move genMove(Board &board, Color color) override;
 
         void train(Board &board);
 
@@ -34,11 +61,11 @@ namespace sanmoku
 
         void saveModel(std::string modelName);
 
-    private:
-        std::random_device rand;
+    protected:
+        void makeDataset(MoveHistory<float> &history, Color color, float lastReward,
+                         std::vector<torch::Tensor> &dataStack, std::vector<torch::Tensor> &labelStack);
 
-        Move getRandomPos();
-
+        std::random_device randomDevice;
         Net model;
     };
 }

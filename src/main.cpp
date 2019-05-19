@@ -16,7 +16,7 @@ using std::endl;
 using std::string;
 
 using sanmoku::Board;
-using sanmoku::Player;
+using sanmoku::NNPlayer;
 
 #define CYCLE_SYMBOL "o"
 #define CROSS_SYMBOL "x"
@@ -60,7 +60,7 @@ void play(int argc, char **argv)
         modelPath = MODEL_NAME;
 
     Board board;
-    Player player;
+    NNPlayer player;
     player.loadModel(modelPath);
 
     cerr << "Pos index" << endl;
@@ -143,7 +143,7 @@ void train(int argc, char **argv)
         modelPath = MODEL_NAME;
 
     Board board;
-    Player player;
+    NNPlayer player;
     player.loadModel(modelPath);
 
     for (int i = 0; i < trainingTimes; i++)
