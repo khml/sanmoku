@@ -7,6 +7,8 @@
 
 #include <torch/torch.h>
 
+#define NN_INPUT_SIZE 21
+
 namespace sanmoku
 {
     template<typename T>
@@ -37,7 +39,7 @@ namespace sanmoku
         torch::nn::Linear fc1;
         torch::nn::Linear fc2;
 
-        NetImpl() : fc1(9, 18), fc2(18, 9)
+        NetImpl() : fc1(NN_INPUT_SIZE, 18), fc2(18, 9)
         {
             register_module("fc1", fc1);
             register_module("fc2", fc2);
@@ -55,7 +57,7 @@ namespace sanmoku
             eval();
             torch::NoGradGuard noGrad;
             auto tensor = toTensor(std::move(vec));
-            tensor = tensor.view({-1, 9});
+            tensor = tensor.view({-1, NN_INPUT_SIZE});
             auto predict = forward(std::move(tensor));
             return toVector(predict);
         }
