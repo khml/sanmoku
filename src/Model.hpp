@@ -7,7 +7,7 @@
 
 #include <torch/torch.h>
 
-#define NN_INPUT_SIZE 21
+#define NN_INPUT_SIZE 27
 
 namespace sanmoku
 {
