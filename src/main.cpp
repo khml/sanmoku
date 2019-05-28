@@ -51,6 +51,12 @@ sanmoku::Color stringToColor(string strColor)
     return color;
 }
 
+void printPosIndices()
+{
+    cerr << "Pos index" << endl;
+    cerr << "0 1 2" << endl << "3 4 5" << endl << "6 7 8" << endl;
+}
+
 void play(int argc, char **argv)
 {
     string modelPath;
@@ -63,9 +69,7 @@ void play(int argc, char **argv)
     NNPlayer player;
     player.loadModel(modelPath);
 
-    cerr << "Pos index" << endl;
-    cerr << "0 1 2" << endl << "3 4 5" << endl << "6 7 8" << endl;
-
+    printPosIndices();
     cerr << "color(o or x),pos (e.g. o3)" << endl << endl;
 
     string cmd, strColor;
@@ -75,6 +79,15 @@ void play(int argc, char **argv)
     {
         cerr << "input = ";
         cin >> cmd;
+
+        if (cmd.length() == 1)
+        {
+            if (cmd == "p")
+            {
+                printPosIndices();
+                continue;
+            }
+        }
 
         if (cmd.substr(0, 3) == "gen")
         {
