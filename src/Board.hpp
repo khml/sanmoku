@@ -9,6 +9,7 @@
 
 #include <string>
 #include <vector>
+#include <tuple>
 
 #define BOARD_SIZE 9
 #define CHECK_ID_ARRAY_SIZE 8
