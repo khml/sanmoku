@@ -208,17 +208,11 @@ namespace sanmoku
     vector<float> Board::getBoard()
     {
         auto vec = vector<float>();
-        Color colors[] = {Empty, Cross, Cycle};
-        for (auto color : colors)
+        for (auto posColor : board)
         {
-            for (auto posColor : board)
-            {
-                if (posColor == color)
-                    vec.push_back(1);
-                else
-                    vec.push_back(0);
-            }
+            vec.push_back((float) posColor);
         }
+
         return vec;
     }
 }
