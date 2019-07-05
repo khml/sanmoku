@@ -1,66 +1,39 @@
 #include "../src/Board.hpp"
 #include <pybind11/pybind11.h>
-#include <pybind11/numpy.h>
+#include <pybind11/stl.h>
 
+using sanmoku::Color;
+using sanmoku::Empty;
+using sanmoku::Cycle;
+using sanmoku::Cross;
+using sanmoku::OutOfRange;
+using sanmoku::Move;
 using sanmoku::Board;
 
 namespace py = pybind11;
 
-class PyBoard
-{
-public:
-    PyBoard()
-    { board = Board(); };
-
-    virtual ~PyBoard()
-    {};
-
-    void put(const int pos, const bool isCross)
-    {
-        if (isCross)
-            board.put(pos, CROSS);
-        else
-            board.put(pos, CYCLE);
-    };
-
-    bool isLegal(const int pos)
-    {
-        return board.isLegal(pos) > 0;
-    };
-
-    bool isFinished()
-    {
-        return board.isFinished() > 0;
-    };
-
-    py::array_t<int> asList()
-    {
-        int* array = board.asList();
-        py::array_t<int> pyArray(BOARD_SIZE);
-        for(int i=0; i<BOARD_SIZE; i++)
-        {
-            *pyArray.mutable_data(i) = array[i];
-        }
-        return pyArray;
-    };
-
-    int result()
-    {
-        return board.result;
-    };
-
-private:
-    Board board;
-};
 
 PYBIND11_MODULE(ccsanmoku, m)
 {
     m.doc() = "Python Sanmoku Module implemented by C++";
-    py::class_<PyBoard>(m,"Board")
-        .def(py::init())
-        .def("put", &PyBoard::put, "put(const int pos, const bool isCross)")
-        .def("asList", &PyBoard::asList)
-        .def("isLegal", &PyBoard::isLegal, "isLegal(const int pos)")
-        .def("isFinished", &PyBoard::isFinished)
-        .def("result", &PyBoard::result);
+
+    py::enum_<Color>(m, "Color")
+            .value("Empty", Empty)
+            .value("Cycle", Cycle)
+            .value("Cross", Cross)
+            .value("OutOfRange", OutOfRange)
+            .export_values();
+
+    py::class_<Move>(m, "Move")
+            .def(py::init<const Color &, const int &>())
+            .def_readonly("color", &Move::color)
+            .def_readonly("pos", &Move::pos);
+
+    py::class_<Board>(m, "Board")
+            .def(py::init())
+            .def("put", &Board::put, "put(const int pos, const bool isCross)")
+            .def("asList", &Board::getBoard)
+            .def("isLegal", &Board::isLegal, "isLegal(const int pos)")
+            .def("isFinished", &Board::isFinished)
+            .def_readonly("result", &Board::result);
 }
