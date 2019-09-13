@@ -3,3 +3,6 @@
 /.idea
 /.dep.inc
 /cmake-build-debug
+/cc/build/
+/cc/dist/
+/cc/pybind11/
