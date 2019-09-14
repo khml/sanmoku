@@ -5,12 +5,12 @@
 #ifndef SANMOKU_BOARDCORE_HPP
 #define SANMOKU_BOARDCORE_HPP
 
-#define BOARD_SIZE 9
-#define CHECK_ID_ARRAY_SIZE 8
-#define CHECK_ID_ARRAY_SIDE_SIZE 3
-
 namespace sanmoku
 {
+    const unsigned int BOARD_SIZE = 9;
+    const unsigned int CHECK_ID_ARRAY_SIZE = 8;
+    const unsigned int CHECK_ID_ARRAY_SIDE_SIZE = 3;
+
     enum Color
     {
         Empty = 0,
