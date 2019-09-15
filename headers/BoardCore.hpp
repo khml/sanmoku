@@ -52,14 +52,27 @@ namespace sanmoku
             Color result()
             { return gameResult; };
 
-        private:
-            Color gameResult = Empty;
-
+        protected:
             Color board[BOARD_SIZE] = {
                     Empty, Empty, Empty,
                     Empty, Empty, Empty,
                     Empty, Empty, Empty
             };
+
+            bool isEmpty(int pos);
+
+            bool isCycle(int pos);
+
+            bool isCross(int pos);
+
+            bool isFull();
+
+            void checkFinishedOrNot();
+
+        private:
+
+            Color gameResult = Empty;
+
 
             /* Array for checking game is finish or not
              *
@@ -67,7 +80,7 @@ namespace sanmoku
              * 3 4 5
              * 6 7 8
              */
-            int checkIdArray[CHECK_ID_ARRAY_SIZE][CHECK_ID_ARRAY_SIDE_SIZE] =
+            const int checkIdArray[CHECK_ID_ARRAY_SIZE][CHECK_ID_ARRAY_SIDE_SIZE] =
                     {
                             {0, 1, 2}, //rows
                             {3, 4, 5}, //rows
@@ -78,19 +91,11 @@ namespace sanmoku
                             {0, 4, 8}, // diagonal
                             {2, 4, 6}, // diagonal
                     };
-            bool finishedFlag = false;
 
-            void checkFinishedOrNot();
+            bool finishedFlag = false;
 
             bool isAny(int pos, Color color);
 
-            bool isEmpty(int pos);
-
-            bool isCycle(int pos);
-
-            bool isCross(int pos);
-
-            bool isFull();
         };
     }
 }
