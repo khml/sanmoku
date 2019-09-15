@@ -5,12 +5,12 @@
 #ifndef SANMOKU_BOARDCORE_HPP
 #define SANMOKU_BOARDCORE_HPP
 
-#define BOARD_SIZE 9
-#define CHECK_ID_ARRAY_SIZE 8
-#define CHECK_ID_ARRAY_SIDE_SIZE 3
-
 namespace sanmoku
 {
+    const unsigned int BOARD_SIZE = 9;
+    const unsigned int CHECK_ID_ARRAY_SIZE = 8;
+    const unsigned int CHECK_ID_ARRAY_SIDE_SIZE = 3;
+
     enum Color
     {
         Empty = 0,
@@ -29,66 +29,75 @@ namespace sanmoku
         const int pos;
     };
 
-    class BoardCore
+    namespace core
     {
-    public:
-        BoardCore();
 
-        BoardCore(const BoardCore& orig);
+        class BoardCore
+        {
+        public:
+            BoardCore();
 
-        virtual ~BoardCore();
+            BoardCore(const BoardCore& orig);
 
-        void clear();
+            virtual ~BoardCore();
 
-        bool put(Move move);
+            void clear();
 
-        bool isLegal(Move move);
+            bool put(Move move);
 
-        bool isFinished();
+            bool isLegal(Move move);
 
-        Color result()
-        { return gameResult; };
+            bool isFinished();
 
-    private:
-        Color gameResult = Empty;
+            Color result()
+            { return gameResult; };
 
-        Color board[BOARD_SIZE] = {
-                Empty, Empty, Empty,
-                Empty, Empty, Empty,
-                Empty, Empty, Empty
+        protected:
+            Color board[BOARD_SIZE] = {
+                    Empty, Empty, Empty,
+                    Empty, Empty, Empty,
+                    Empty, Empty, Empty
+            };
+
+            bool isEmpty(int pos);
+
+            bool isCycle(int pos);
+
+            bool isCross(int pos);
+
+            bool isFull();
+
+            void checkFinishedOrNot();
+
+        private:
+
+            Color gameResult = Empty;
+
+
+            /* Array for checking game is finish or not
+             *
+             * 0 1 2
+             * 3 4 5
+             * 6 7 8
+             */
+            const int checkIdArray[CHECK_ID_ARRAY_SIZE][CHECK_ID_ARRAY_SIDE_SIZE] =
+                    {
+                            {0, 1, 2}, //rows
+                            {3, 4, 5}, //rows
+                            {6, 7, 8}, //rows
+                            {0, 3, 6}, //columns
+                            {1, 4, 7}, //columns
+                            {2, 5, 8}, //columns
+                            {0, 4, 8}, // diagonal
+                            {2, 4, 6}, // diagonal
+                    };
+
+            bool finishedFlag = false;
+
+            bool isAny(int pos, Color color);
+
         };
-
-        /* Array for checking game is finish or not
-         *
-         * 0 1 2
-         * 3 4 5
-         * 6 7 8
-         */
-        int checkIdArray[CHECK_ID_ARRAY_SIZE][CHECK_ID_ARRAY_SIDE_SIZE] =
-                {
-                        {0, 1, 2}, //rows
-                        {3, 4, 5}, //rows
-                        {6, 7, 8}, //rows
-                        {0, 3, 6}, //columns
-                        {1, 4, 7}, //columns
-                        {2, 5, 8}, //columns
-                        {0, 4, 8}, // diagonal
-                        {2, 4, 6}, // diagonal
-                };
-        bool finishedFlag = false;
-
-        void checkFinishedOrNot();
-
-        bool isAny(int pos, Color color);
-
-        bool isEmpty(int pos);
-
-        bool isCycle(int pos);
-
-        bool isCross(int pos);
-
-        bool isFull();
-    };
+    }
 }
 
 
