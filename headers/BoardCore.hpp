@@ -14,7 +14,7 @@ namespace sanmoku
     enum Color
     {
         Empty = 0,
-        Cycle = -1,
+        Circle = -1,
         Cross = 1,
         OutOfRange = 2,
     };
