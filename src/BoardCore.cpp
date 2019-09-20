@@ -8,7 +8,7 @@ namespace sanmoku
 {
     Color turnColor(Color color)
     {
-        Color turnedColor = color == Cross ? Cycle : Cross;
+        Color turnedColor = color == Cross ? Circle : Cross;
         return turnedColor;
     }
 
@@ -51,7 +51,7 @@ namespace sanmoku
 
         bool BoardCore::isCycle(const int pos)
         {
-            return isAny(pos, Cycle);
+            return isAny(pos, Circle);
         }
 
         bool BoardCore::isLegal(const Move move)
@@ -89,7 +89,7 @@ namespace sanmoku
 
         void BoardCore::checkFinishedOrNot()
         {
-            int cycleSum = 3 * (int) Cycle;
+            int cycleSum = 3 * (int) Circle;
             int crossSum = 3 * (int) Cross;
             int i, j, sum;
             for (i = 0; i < CHECK_ID_ARRAY_SIZE; i++)
@@ -103,7 +103,7 @@ namespace sanmoku
                 if ((sum == cycleSum) || (sum == crossSum))
                 {
                     finishedFlag = true;
-                    gameResult = (sum == cycleSum ? Cycle : Cross);
+                    gameResult = (sum == cycleSum ? Circle : Cross);
                     return;
                 }
             }
