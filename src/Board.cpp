@@ -7,10 +7,6 @@
 
 #include "Board.hpp"
 
-#define CIRCLE_SIGN "o"
-#define CROSS_SIGN "x"
-#define EMPTY_SIGN "."
-
 using std::cerr;
 using std::endl;
 using std::string;
@@ -42,7 +38,7 @@ namespace sanmoku
 
     void Board::printBoard()
     {
-        for(int i=0; i < BOARD_SIZE; i++)
+        for (int i = 0; i < BOARD_SIZE; i++)
         {
             cerr << toSign(board[i]) << ", ";
 
