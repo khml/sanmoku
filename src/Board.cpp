@@ -17,7 +17,6 @@ using std::string;
 
 namespace sanmoku
 {
-
     string toSign(Color color)
     {
         if (color == Empty)

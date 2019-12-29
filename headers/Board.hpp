@@ -10,7 +10,6 @@
 
 namespace sanmoku
 {
-
     class Board : public core::BoardCore
     {
     public:
