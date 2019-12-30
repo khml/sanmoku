@@ -8,13 +8,11 @@ namespace sanmoku
 {
     Color turnColor(Color color)
     {
-        Color turnedColor = color == Cross ? Circle : Cross;
-        return turnedColor;
+        return color == Circle ? Circle : Cross;
     }
 
     namespace core
     {
-
         BoardCore::BoardCore()
         {
             clear();

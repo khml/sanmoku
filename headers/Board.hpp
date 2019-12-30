@@ -8,8 +8,14 @@
 #include "BoardCore.hpp"
 
 
+#define CIRCLE_SIGN "o"
+#define CROSS_SIGN "x"
+#define EMPTY_SIGN "."
+
+
 namespace sanmoku
 {
+    std::string toSign(Color color);
 
     class Board : public core::BoardCore
     {
