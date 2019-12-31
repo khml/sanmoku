@@ -6,8 +6,8 @@
 #include <string>
 
 #include <Board.hpp>
+#include <Player.hpp>
 
-using sanmoku::Board;
 
 sanmoku::Color stringToColor(const std::string& strColor)
 {
@@ -23,7 +23,9 @@ sanmoku::Color stringToColor(const std::string& strColor)
 
 void play()
 {
-    Board board;
+    sanmoku::Board board;
+    sanmoku::RandomPlayer player;
+
 
     std::cerr << "color(o or x),pos (e.g. o3)" << std::endl << std::endl;
 
@@ -32,6 +34,12 @@ void play()
     int pos;
     while (true)
     {
+        if (board.isFinished())
+        {
+            std::cerr << "Win : " << sanmoku::toSign(board.result()) << std::endl;
+            break;
+        }
+
         std::cerr << "input = ";
         std::cin >> cmd;
 
@@ -41,7 +49,26 @@ void play()
             {
                 board.printBoard();
                 continue;
+            } else
+                std::cerr << "not exists such a command" << std::endl;
+        }
+
+        if (cmd.length() == 4)
+        {
+            if (cmd == "geno")
+            {
+                color = sanmoku::Circle;
+            } else if (cmd == "genx")
+            {
+                color = sanmoku::Cross;
+            } else
+            {
+                std::cerr << "not exists such a command" << std::endl;
+                continue;
             }
+            board.put(player.genMove(board, color));
+            board.printBoard();
+            continue;
         }
 
         strColor = cmd.substr(0, 1);
@@ -60,12 +87,6 @@ void play()
                 board.printBoard();
             else
                 std::cerr << "Ilegal move" << std::endl;
-        }
-
-        if (board.isFinished())
-        {
-            std::cerr << "Win : " << sanmoku::toSign(board.result()) << std::endl;
-            break;
         }
     }
 }
