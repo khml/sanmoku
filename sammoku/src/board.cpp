@@ -7,13 +7,9 @@
 
 #include <sammoku/board.hpp>
 
-using std::cerr;
-using std::endl;
-using std::string;
-
 namespace sanmoku
 {
-    string toSign(Color color)
+    std::string toSign(const Color color)
     {
         if (color == Empty)
             return EMPTY_SIGN;
@@ -31,21 +27,21 @@ namespace sanmoku
     }
 
     Board::Board(const Board& orig)
-    {}
+    = default;
 
     Board::~Board()
-    {}
+    = default;
 
-    void Board::printBoard()
+    void Board::printBoard() const
     {
         for (int i = 0; i < BOARD_SIZE; i++)
         {
-            cerr << toSign(board[i]) << ", ";
+            std::cerr << toSign(board[i]) << ", ";
 
             if ((i + 1) % BOARD_LENGTH == 0)
-                cerr << endl;
+                std::cerr << std::endl;
         }
-        cerr << endl;
+        std::cerr << std::endl;
     }
 
 }

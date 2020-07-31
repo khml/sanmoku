@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.0)
 project(sanmoku)
 
 include_directories(sammoku/include)
-file(GLOB SOURCES sammoku/src/*.cpp)
+file(GLOB SOURCES sammoku/src/*.cpp sammoku/src/core/*.cpp)
 
 add_executable(${PROJECT_NAME} ${SOURCES})
 target_link_libraries(${PROJECT_NAME})

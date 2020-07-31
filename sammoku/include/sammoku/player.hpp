@@ -30,7 +30,7 @@ namespace sanmoku
 
         RandomPlayer(RandomPlayer &orig);
 
-        virtual ~RandomPlayer();
+        ~RandomPlayer() override;
 
         Move genMove(Board &board, Color color) override;
 

@@ -2,7 +2,7 @@
 // Created by KHML on 2019-09-13.
 //
 
-#include <sammoku/board_core.hpp>
+#include <sammoku/core/board_core.hpp>
 
 namespace sanmoku
 {
@@ -13,53 +13,83 @@ namespace sanmoku
 
     namespace core
     {
+        /* Array for checking game is finish or not
+         *
+         * 0 1 2
+         * 3 4 5
+         * 6 7 8
+         */
+        constexpr int checkIdArray[CHECK_ID_ARRAY_SIZE][CHECK_ID_ARRAY_SIDE_SIZE] =
+            {
+                {0, 1, 2}, //rows
+                {3, 4, 5}, //rows
+                {6, 7, 8}, //rows
+                {0, 3, 6}, //columns
+                {1, 4, 7}, //columns
+                {2, 5, 8}, //columns
+                {0, 4, 8}, // diagonal
+                {2, 4, 6}, // diagonal
+            };
+
         BoardCore::BoardCore()
         {
             clear();
         }
 
-        BoardCore::BoardCore(const BoardCore& orig)
-        {}
+        BoardCore::BoardCore(const BoardCore& orig) :gameResult(orig.gameResult), finishedFlag(orig.finishedFlag)
+        {
+            int idx = 0;
+            for (const Color& color: orig.board)
+            {
+                board[idx] = orig.board[idx];
+                idx++;
+            }
+        }
 
         BoardCore::~BoardCore()
-        {}
+        = default;
 
         void BoardCore::clear()
         {
             finishedFlag = false;
             gameResult = Empty;
-            for (int i = 0; i < BOARD_SIZE; i++)
-                board[i] = Empty;
+            for (sanmoku::Color& elem : board)
+                elem = Empty;
         }
 
-        bool BoardCore::isAny(int pos, sanmoku::Color color)
+        bool BoardCore::isAny(int pos, sanmoku::Color color) const
         {
             return board[pos] == color;
         }
 
-        bool BoardCore::isEmpty(const int pos)
+        bool BoardCore::isEmpty(const int pos) const
         {
             return isAny(pos, Empty);
         }
 
-        bool BoardCore::isCross(const int pos)
+        bool BoardCore::isCross(const int pos) const
         {
             return isAny(pos, Cross);
         }
 
-        bool BoardCore::isCycle(const int pos)
+        bool BoardCore::isCycle(const int pos) const
         {
             return isAny(pos, Circle);
         }
 
-        bool BoardCore::isLegal(const Move move)
+        bool BoardCore::isLegal(const Move move) const
         {
             return isEmpty(move.pos);
         }
 
-        bool BoardCore::isFinished()
+        bool BoardCore::isFinished() const
         {
             return finishedFlag;
+        }
+
+        Color BoardCore::result() const
+        {
+            return gameResult;
         }
 
         bool BoardCore::put(const Move move)
@@ -75,7 +105,7 @@ namespace sanmoku
             return true;
         }
 
-        bool BoardCore::isFull()
+        bool BoardCore::isFull() const
         {
             for (int i = 0; i < BOARD_SIZE; i++)
             {
@@ -111,7 +141,6 @@ namespace sanmoku
                 finishedFlag = true;
             }
         }
-
     }
 
 }

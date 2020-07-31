@@ -5,12 +5,11 @@
 #ifndef SANMOKU_BOARD_HPP
 #define SANMOKU_BOARD_HPP
 
-#include <sammoku/board_core.hpp>
+#include <sammoku/core/board_core.hpp>
 
 #define CIRCLE_SIGN "o"
 #define CROSS_SIGN "x"
 #define EMPTY_SIGN "."
-
 
 namespace sanmoku
 {
@@ -23,9 +22,9 @@ namespace sanmoku
 
         Board(const Board& org);
 
-        virtual ~Board();
+        ~Board() override;
 
-        void printBoard();
+        void printBoard() const;
     };
 
 }
