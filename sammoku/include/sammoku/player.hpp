@@ -7,7 +7,7 @@
 
 #include <random>
 
-#include "Board.hpp"
+#include <sammoku/board.hpp>
 
 namespace sanmoku
 {

@@ -5,7 +5,7 @@
 #include <iostream>
 #include <string>
 
-#include "Board.hpp"
+#include <sammoku/board.hpp>
 
 using std::cerr;
 using std::endl;

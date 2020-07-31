@@ -5,8 +5,7 @@
 #ifndef SANMOKU_BOARD_HPP
 #define SANMOKU_BOARD_HPP
 
-#include "BoardCore.hpp"
-
+#include <sammoku/board_core.hpp>
 
 #define CIRCLE_SIGN "o"
 #define CROSS_SIGN "x"

@@ -2,10 +2,10 @@
 // Created by KHML on 2019-09-13.
 //
 
-#ifndef SANMOKU_BOARDCORE_HPP
-#define SANMOKU_BOARDCORE_HPP
+#ifndef SANMOKU_BOARD_CORE_HPP
+#define SANMOKU_BOARD_CORE_HPP
 
-#include "BoardConfig.hpp"
+#include <sammoku/board_config.hpp>
 
 namespace sanmoku
 {
@@ -82,4 +82,4 @@ namespace sanmoku
 }
 
 
-#endif //SANMOKU_BOARDCORE_HPP
+#endif //SANMOKU_BOARD_CORE_HPP

@@ -2,18 +2,18 @@
 // Created by KHML on 2019/12/30.
 //
 
-#include "Player.hpp"
+#include <sammoku/player.hpp>
 
 namespace sanmoku
 {
-    Player::Player(){}
+    Player::Player()
+    {}
 
     Player::Player(const Player& orig)
     {}
 
     Player::~Player()
     {}
-
 
     RandomPlayer::RandomPlayer()
     {}

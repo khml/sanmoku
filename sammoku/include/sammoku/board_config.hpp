@@ -2,8 +2,8 @@
 // Created by KHML on 2019/12/29.
 //
 
-#ifndef SANMOKU_BOARDCONFIG_HPP
-#define SANMOKU_BOARDCONFIG_HPP
+#ifndef SANMOKU_BOARD_CONFIG_HPP
+#define SANMOKU_BOARD_CONFIG_HPP
 
 namespace sanmoku
 {
@@ -29,4 +29,4 @@ namespace sanmoku
     };
 }
 
-#endif //SANMOKU_BOARDCONFIG_HPP
+#endif //SANMOKU_BOARD_CONFIG_HPP

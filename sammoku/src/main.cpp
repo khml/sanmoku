@@ -5,8 +5,8 @@
 #include <iostream>
 #include <string>
 
-#include <Board.hpp>
-#include <Player.hpp>
+#include <sammoku/board.hpp>
+#include <sammoku/player.hpp>
 
 
 sanmoku::Color stringToColor(const std::string& strColor)

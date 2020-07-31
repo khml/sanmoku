@@ -2,7 +2,7 @@
 // Created by KHML on 2019-09-13.
 //
 
-#include "BoardCore.hpp"
+#include <sammoku/board_core.hpp>
 
 namespace sanmoku
 {
