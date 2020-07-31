@@ -41,8 +41,7 @@ namespace sanmoku
             int idx = 0;
             for (const Color& color: orig.board)
             {
-                board[idx] = orig.board[idx];
-                idx++;
+                board[idx++] = color;
             }
         }
 

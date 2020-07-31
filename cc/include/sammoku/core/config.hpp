@@ -10,10 +10,10 @@
 
 namespace sanmoku
 {
-    const unsigned int BOARD_SIZE = 9;
-    const unsigned int BOARD_LENGTH = 3;
-    const unsigned int CHECK_ID_ARRAY_SIZE = 8;
-    const unsigned int CHECK_ID_ARRAY_SIDE_SIZE = 3;
+    const int BOARD_SIZE = 9;
+    const int BOARD_LENGTH = 3;
+    const int CHECK_ID_ARRAY_SIZE = 8;
+    const int CHECK_ID_ARRAY_SIDE_SIZE = 3;
 }
 
 #endif //SANMOKU_CONFIG_HPP

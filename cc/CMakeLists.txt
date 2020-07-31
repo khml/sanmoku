@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.13)
 
 project(play)
 
-file(GLOB SOURCES src/sanmoku/*.cpp src/sanmoku/core/*.cpp)
+file(GLOB SOURCES src/sammoku/*.cpp src/sammoku/core/*.cpp)
 
 add_executable(${PROJECT_NAME} ${SOURCES})
 target_link_libraries(${PROJECT_NAME})
